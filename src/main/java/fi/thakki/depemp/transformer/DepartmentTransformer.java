@@ -10,7 +10,8 @@ public class DepartmentTransformer {
 
 	public DepartmentDto transform(Department department) {
 		DepartmentDto result = new DepartmentDto();
-		result.setName(department.getName());
+		result.id = department.getId();
+		result.name = department.getName();
 		return result;
 	}
 }

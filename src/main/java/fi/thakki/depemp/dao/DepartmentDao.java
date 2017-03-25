@@ -1,8 +1,11 @@
 package fi.thakki.depemp.dao;
 
-import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import fi.thakki.depemp.model.Department;
@@ -10,9 +13,11 @@ import fi.thakki.depemp.model.Department;
 @Repository
 public class DepartmentDao {
 
+	@Autowired
+	private EntityManager myEm;
+
 	public List<Department> listAll() {
-		Department dep1 = new Department();
-		dep1.setName("Section 42");
-		return Arrays.asList(dep1);
+		TypedQuery<Department> query = myEm.createQuery("from Department", Department.class);
+		return query.getResultList();
 	}
 }
