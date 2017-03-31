@@ -20,4 +20,8 @@ public class DepartmentDao {
 		TypedQuery<Department> query = myEm.createQuery("from Department", Department.class);
 		return query.getResultList();
 	}
+
+	public Department findDepartment(Long id) {
+		return myEm.find(Department.class, id);
+	}
 }
