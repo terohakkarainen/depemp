@@ -1,5 +1,6 @@
 package fi.thakki.depemp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,8 @@ public class Department {
 	public void setId(final Long id) {
 		myId = id;
 	}
-	
+
+	@Column(name="name", nullable=false, length=LengthDomain.SHORT_DESCRIPTION)
 	public String getName() {
 		return myName;
 	}
@@ -30,6 +32,7 @@ public class Department {
 		myName = name;
 	}
 
+	@Column(name="description", length=LengthDomain.LONG_DESCRIPTION)
 	public String getDescription() {
 		return myDescription;
 	}
