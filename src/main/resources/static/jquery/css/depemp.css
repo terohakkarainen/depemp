@@ -1,0 +1,14 @@
+#header {
+  height: 50px;
+  background-color: gray;
+}
+
+#footer {
+  height: 50px;
+  background-color: gray;
+}
+
+#contents {
+  padding: 10px 10px 10px 10px;
+  min-height: 200px;
+}
