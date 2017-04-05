@@ -34,6 +34,6 @@ public class DepartmentController {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(DepartmentNotFoundException.class)
 	private void handleDepartmentNotFoundException() {
-		// Nothing to do
+		// Nothing
 	}
 }

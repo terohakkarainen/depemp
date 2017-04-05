@@ -1,7 +1,7 @@
 package fi.thakki.depemp.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,26 +19,25 @@ public class DepartmentService {
 	public static class DepartmentNotFoundException extends Exception {
 		// Nothing
 	}
-	
+
 	@Autowired
 	private GenericDao myGenericDao;
-	
+
 	@Autowired
 	private DepartmentTransformer myTransformer;
-	
+
 	@Transactional(readOnly = true)
 	public List<DepartmentListDto> listDepartments() {
-      	List<DepartmentListDto> result = new ArrayList<>();
-      	for(Department d : myGenericDao.findAll(Department.class)) {
-    		result.add(myTransformer.toListDto(d));
-    	}
-      	return result;
-    }
+		return myGenericDao.findAll(Department.class)
+				.stream()
+				.map(d -> myTransformer.toListDto(d))
+				.collect(Collectors.toList());
+	}
 
 	@Transactional(readOnly = true)
 	public DepartmentDetailsDto getDepartment(Long id) throws DepartmentNotFoundException {
 		Department department = myGenericDao.find(id, Department.class);
-		if(department != null) {
+		if (department != null) {
 			return myTransformer.toDetailsDto(department);
 		}
 		throw new DepartmentNotFoundException();
