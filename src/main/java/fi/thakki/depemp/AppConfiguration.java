@@ -23,8 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:application.properties")
 public class AppConfiguration {
 
-	@Value("${spring.jpa.entity.package}")
-	private String myEntityPackage;
+	private static final String JPA_ENTITY_PACKAGE = "fi.thakki.depemp.model";
 
 	@Value("${spring.datasource.driver-class-name}")
 	private String myDatasourceDriverClassName;
@@ -59,7 +58,7 @@ public class AppConfiguration {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource());
 		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-		entityManagerFactoryBean.setPackagesToScan(myEntityPackage);
+		entityManagerFactoryBean.setPackagesToScan(JPA_ENTITY_PACKAGE);
 		entityManagerFactoryBean.setJpaProperties(hibernateProperties());
 		return entityManagerFactoryBean;
 	}
