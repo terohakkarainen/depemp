@@ -119,6 +119,16 @@
      </dependency>
     </dependencies>
    </plugin>
+   <plugin>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-maven-plugin</artifactId>
+    <version>4.1.2</version>
+    <configuration>
+     <url>jdbc:postgresql://localhost/depemp</url>
+     <user>depemp</user>
+     <password>depemp</password>
+    </configuration>
+   </plugin>
   </plugins>
  </build>
 
