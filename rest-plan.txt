@@ -1,0 +1,21 @@
+URL					Method			Description												Done
+===================================================================================================
+/departments		GET				All departments in system								x
+/departments		POST			Create new department into system
+
+/departments/{id}	GET				Department with given id								x
+/departments/{id}	PUT				Update department with given id
+/departments/{id}	DELETE			Delete department with given id
+
+/employees			GET				All employees in system
+/employees			POST			Create new employee into system
+
+/employees/{id}		GET				Employee with given id
+/employees/{id}		PUT				Update employee with given id
+/employees/{id}		DELETE			Delete employee with given id
+
+/departments/{id}/employees			GET		All employees in given department
+/departments/{id}/employees			POST	Add new employees into given department
+
+/departments/{id}/employees/{id}	GET		Given employee in given department
+/departments/{id}/employees/{id}	DELETE	Remove given employee from given department
