@@ -7,9 +7,7 @@ import javax.sql.DataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -19,9 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("fi.thakki.depemp.dao")
-@ComponentScan("fi.thakki.depemp.service")
-@PropertySource("classpath:application.properties")
-public class AppConfiguration {
+public class DatabaseConfiguration {
 
 	private static final String JPA_ENTITY_PACKAGE = "fi.thakki.depemp.model";
 
@@ -67,7 +63,7 @@ public class AppConfiguration {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", myHibernateDialect);
 		properties.put("hibernate.show_sql", myHibernateShowSql);
-		properties.put("hibernate.ddl-auto", myHibernateDdlAuto);
+		properties.put("hibernate.hbm2ddl.auto", myHibernateDdlAuto);
 		return properties;
 	}
 
