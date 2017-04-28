@@ -1,7 +1,6 @@
 package fi.thakki.depemp;
 
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
@@ -10,27 +9,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("fi.thakki.depemp.dao")
-@ComponentScan("fi.thakki.depemp.service")
-@PropertySource("classpath:application.properties")
+@TestPropertySource("classpath:application-integrationTest.properties")
 public class IntegrationTestConfiguration {
 
 	private static final String JPA_ENTITY_PACKAGE = "fi.thakki.depemp.model";
 
 	@Value("${spring.datasource.driver-class-name}")
 	private String myDatasourceDriverClassName;
-	
+
 	@Value("${spring.datasource.url}")
 	private String myDatasourceUrl;
 
@@ -70,7 +68,7 @@ public class IntegrationTestConfiguration {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", myHibernateDialect);
 		properties.put("hibernate.show_sql", myHibernateShowSql);
-		properties.put("hibernate.ddl-auto", myHibernateDdlAuto);
+		properties.put("hibernate.hbm2ddl.auto", myHibernateDdlAuto);
 		return properties;
 	}
 
@@ -83,13 +81,15 @@ public class IntegrationTestConfiguration {
 		dataSource.setPassword(myDatasourcePassword);
 		return dataSource;
 	}
-	
+
 	@Bean
-    public EmbeddedServletContainerFactory servletContainer() {
-        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
-        factory.setPort(9000);
-        factory.setSessionTimeout(10, TimeUnit.MINUTES);
-        //factory.addErrorPages(new ErrorPage(HttpStatus.404, "/notfound.html"));
-        return factory;
-    }
+	public EmbeddedServletContainerFactory servletContainer() {
+		return new TomcatEmbeddedServletContainerFactory();
+
+	}
+
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertiesResolver() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 }
