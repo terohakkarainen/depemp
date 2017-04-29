@@ -41,6 +41,9 @@ public class DatabaseConfiguration {
 
 	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String myHibernateDdlAuto;
+	
+	@Value("${spring.jpa.hibernate.import-sql-path}")
+	private String myHibernateImportSqlPath;
 
 	@Bean
 	public JpaTransactionManager transactionManager() {
@@ -64,6 +67,7 @@ public class DatabaseConfiguration {
 		properties.put("hibernate.dialect", myHibernateDialect);
 		properties.put("hibernate.show_sql", myHibernateShowSql);
 		properties.put("hibernate.hbm2ddl.auto", myHibernateDdlAuto);
+		properties.put("hibernate.hbm2ddl.import_files", myHibernateImportSqlPath);
 		return properties;
 	}
 
