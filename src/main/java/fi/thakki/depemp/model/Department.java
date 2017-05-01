@@ -9,6 +9,9 @@ import javax.persistence.Id;
 @Entity
 public class Department {
 
+	public static final int NAME_LENGTH = LengthDomain.SHORT_DESCRIPTION;
+	public static final int DESCRIPTION_LENGTH = LengthDomain.LONG_DESCRIPTION;
+	
 	private Long myId;
 	private String myName;
 	private String myDescription;
@@ -23,7 +26,7 @@ public class Department {
 		myId = id;
 	}
 
-	@Column(name="name", nullable=false, length=LengthDomain.SHORT_DESCRIPTION)
+	@Column(name="name", nullable=false, length=NAME_LENGTH)
 	public String getName() {
 		return myName;
 	}
@@ -32,7 +35,7 @@ public class Department {
 		myName = name;
 	}
 
-	@Column(name="description", length=LengthDomain.LONG_DESCRIPTION)
+	@Column(name="description", length=DESCRIPTION_LENGTH)
 	public String getDescription() {
 		return myDescription;
 	}
