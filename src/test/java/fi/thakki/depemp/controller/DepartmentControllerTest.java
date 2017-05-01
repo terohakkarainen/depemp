@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import fi.thakki.depemp.Application;
 import fi.thakki.depemp.model.Department;
+import fi.thakki.depemp.model.EntityFactory;
 import fi.thakki.depemp.model.LengthDomain;
 import fi.thakki.depemp.model.builder.DepartmentBuilder;
 

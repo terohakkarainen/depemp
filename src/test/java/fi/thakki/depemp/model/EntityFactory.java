@@ -1,4 +1,4 @@
-package fi.thakki.depemp.controller;
+package fi.thakki.depemp.model;
 
 import javax.persistence.EntityManager;
 
