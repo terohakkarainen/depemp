@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fi.thakki.depemp.dao.GenericDao;
+import fi.thakki.depemp.dto.AddDepartmentDto;
+import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.DepartmentListDto;
 import fi.thakki.depemp.model.Department;
@@ -41,5 +43,14 @@ public class DepartmentService {
 			return myTransformer.toDetailsDto(department);
 		}
 		throw new DepartmentNotFoundException();
+	}
+
+	@Transactional
+	public DepartmentAddedDto addDepartment(AddDepartmentDto dto) {
+		DepartmentAddedDto result = new DepartmentAddedDto();
+		Department department = myTransformer.toDepartment(dto);
+		myGenericDao.persist(department);
+		result.id = department.getId();
+		return result;
 	}
 }

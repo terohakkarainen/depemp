@@ -27,4 +27,8 @@ public class GenericDao {
 	private CriteriaBuilder criteriaBuilder() {
 		return myEm.getCriteriaBuilder();
 	}
+	
+	public void persist(Object obj) {
+		myEm.persist(obj);
+	}
 }
