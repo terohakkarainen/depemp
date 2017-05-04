@@ -1,23 +1,32 @@
 package fi.thakki.depemp.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import fi.thakki.depemp.model.Department;
+
 public class AddDepartmentDto {
 
-	private String myName;
-	private String myDescription;
+	@NotNull
+	@Size(min=1, max=Department.NAME_LENGTH)
+	private String name;
+
+	@Size(max=Department.DESCRIPTION_LENGTH)
+	private String description;
 
 	public String getName() {
-		return myName;
+		return name;
 	}
 
 	public void setName(String name) {
-		myName = name;
+		this.name = name;
 	}
 
 	public String getDescription() {
-		return myDescription;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		myDescription = description;
+		this.description = description;
 	}
 }
