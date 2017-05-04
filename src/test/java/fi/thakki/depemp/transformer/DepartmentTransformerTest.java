@@ -19,7 +19,7 @@ public class DepartmentTransformerTest {
 
 		DepartmentListDto result = myTransformerUnderTest.toListDto(dep);
 
-		assertEquals(dep.getId(), result.id);
+		assertEquals(dep.getId().longValue(), result.id);
 		assertEquals(dep.getName(), result.name);
 	}
 }

@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import fi.thakki.depemp.dto.AddDepartmentDto;
@@ -35,8 +33,13 @@ public class DepartmentController {
 	}
 
 	@RequestMapping(value = "/departments/{id}", method = RequestMethod.GET)
-	public DepartmentDetailsDto getDepartment(@PathVariable Long id) throws DepartmentNotFoundException {
-		return myDepartmentService.getDepartment(id);
+	public ResponseEntity<DepartmentDetailsDto> getDepartment(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(myDepartmentService.getDepartment(id));
+		}
+		catch(DepartmentNotFoundException dnfe) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@RequestMapping(value = "/departments", method = RequestMethod.POST)
@@ -47,11 +50,5 @@ public class DepartmentController {
 			return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
 		}
 		return ResponseEntity.ok(myDepartmentService.addDepartment(department));
-	}
-
-	@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No department found with id")
-	@ExceptionHandler(DepartmentNotFoundException.class)
-	private void handleDepartmentNotFoundException() {
-		// Nothing
 	}
 }
