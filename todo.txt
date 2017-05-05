@@ -1,0 +1,4 @@
+- Uniqueness for department name
+- E2E-test harness
+- Generic error (e.g., database lost) test
+- Error controller (http://stackoverflow.com/questions/31134333/this-application-has-no-explicit-mapping-for-error)

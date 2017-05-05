@@ -1,13 +1,15 @@
-package fi.thakki.depemp.controller;
+package fi.thakki.depemp.transformer;
 
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import fi.thakki.depemp.dto.ValidationErrorDto;
 
-public class ValidationErrorBuilder {
+@Service
+public class ValidationErrorTransformer {
 	
-	public static ValidationErrorDto fromBindingErrors(Errors errors) {
+	public ValidationErrorDto toValidationErrorDto(Errors errors) {
 		ValidationErrorDto result = new ValidationErrorDto(
 				String.format("Validation failed: %d error(s)", errors.getErrorCount()));
 		for (FieldError error : errors.getFieldErrors()) {

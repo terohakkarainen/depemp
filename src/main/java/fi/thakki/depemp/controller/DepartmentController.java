@@ -20,6 +20,7 @@ import fi.thakki.depemp.dto.DepartmentListDto;
 import fi.thakki.depemp.dto.ResponseDtoBase;
 import fi.thakki.depemp.service.DepartmentService;
 import fi.thakki.depemp.service.DepartmentService.DepartmentNotFoundException;
+import fi.thakki.depemp.transformer.ValidationErrorTransformer;
 
 @RestController
 public class DepartmentController {
@@ -27,6 +28,9 @@ public class DepartmentController {
 	@Autowired
 	private DepartmentService myDepartmentService;
 
+	@Autowired
+	private ValidationErrorTransformer myValidationErrorTransformer;
+	
 	@RequestMapping(value = "/departments", method = RequestMethod.GET)
 	public List<DepartmentListDto> listDepartments() {
 		return myDepartmentService.listDepartments();
@@ -47,7 +51,7 @@ public class DepartmentController {
 			@ModelAttribute("department") @Valid AddDepartmentDto department,
 			Errors errors) {
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+			return ResponseEntity.badRequest().body(myValidationErrorTransformer.toValidationErrorDto(errors));
 		}
 		return ResponseEntity.ok(myDepartmentService.addDepartment(department));
 	}
