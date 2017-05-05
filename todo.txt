@@ -2,3 +2,4 @@
 - E2E-test harness
 - Generic error (e.g., database lost) test
 - Error controller (http://stackoverflow.com/questions/31134333/this-application-has-no-explicit-mapping-for-error)
+- Replace greeting with something else in Angular -> get rid of Greeting classes.
