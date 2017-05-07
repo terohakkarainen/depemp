@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -25,11 +24,16 @@ import fi.thakki.depemp.transformer.ValidationErrorTransformer;
 @RestController
 public class DepartmentController {
 
-	@Autowired
 	private DepartmentService myDepartmentService;
-
-	@Autowired
 	private ValidationErrorTransformer myValidationErrorTransformer;
+	
+	public DepartmentController(
+			DepartmentService departmentService,
+			ValidationErrorTransformer validationErrorTransformer) {
+		
+		myDepartmentService = departmentService;
+		myValidationErrorTransformer = validationErrorTransformer;
+	}
 	
 	@RequestMapping(value = "/departments", method = RequestMethod.GET)
 	public List<DepartmentListDto> listDepartments() {
@@ -51,7 +55,8 @@ public class DepartmentController {
 			@ModelAttribute("department") @Valid AddDepartmentDto department,
 			Errors errors) {
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(myValidationErrorTransformer.toValidationErrorDto(errors));
+			return ResponseEntity.badRequest().body(
+					myValidationErrorTransformer.toValidationErrorDto(errors));
 		}
 		return ResponseEntity.ok(myDepartmentService.addDepartment(department));
 	}

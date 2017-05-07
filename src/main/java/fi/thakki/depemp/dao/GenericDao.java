@@ -6,15 +6,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class GenericDao {
 
-	@Autowired
 	private EntityManager myEm;
 
+	public GenericDao(EntityManager entityManager) {
+		myEm = entityManager;
+	}
+	
     public <T> List<T> findAll(Class<T> clazz) {
         CriteriaQuery<T> query = criteriaBuilder().createQuery(clazz);
         return myEm.createQuery(query.select(query.from(clazz))).getResultList();

@@ -3,7 +3,6 @@ package fi.thakki.depemp.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +21,14 @@ public class DepartmentService {
 		// Nothing
 	}
 
-	@Autowired
 	private GenericDao myGenericDao;
-
-	@Autowired
 	private DepartmentTransformer myTransformer;
 
+	public DepartmentService(GenericDao genericDao, DepartmentTransformer transformer) {
+		myGenericDao = genericDao;
+		myTransformer = transformer;
+	}
+	
 	@Transactional(readOnly = true)
 	public List<DepartmentListDto> listDepartments() {
 		return myGenericDao.findAll(Department.class)
