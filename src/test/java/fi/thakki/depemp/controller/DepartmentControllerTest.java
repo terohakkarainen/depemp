@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import fi.thakki.depemp.Application;
 import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
+import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ValidationErrorDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.model.EntityFactory;
@@ -56,13 +57,14 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         Department department = new DepartmentBuilder().name(name).description(desc).get();
         myEntityFactory.persist(department);
 
-        ResponseEntity<String> result = myRestTemplate
-                .getForEntity("/departments/" + department.getId(), String.class);
+        ResponseEntity<DepartmentDetailsDto> result = myRestTemplate
+                .getForEntity("/departments/" + department.getId(), DepartmentDetailsDto.class);
 
-        // TODO
         assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
-        JSONAssert.assertEquals(String.format("{\"id\":%d,\"name\":\"%s\",\"description\":%s}",
-                department.getId(), name, desc), result.getBody(), true);
+        DepartmentDetailsDto details = result.getBody();
+        assertThat(details.id).isGreaterThan(0);
+        assertThat(details.name).isEqualTo(name);
+        assertThat(details.description).isEqualTo(desc);
     }
 
     @Test

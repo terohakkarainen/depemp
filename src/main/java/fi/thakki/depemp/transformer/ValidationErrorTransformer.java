@@ -8,14 +8,16 @@ import fi.thakki.depemp.dto.ValidationErrorDto;
 
 @Service
 public class ValidationErrorTransformer {
-	
-	public ValidationErrorDto toValidationErrorDto(Errors errors) {
-		ValidationErrorDto result = new ValidationErrorDto(
-				String.format("Validation failed: %d error(s)", errors.getErrorCount()));
-		for (FieldError error : errors.getFieldErrors()) {
-			result.addValidationError(
-					String.format("%s: %s", error.getField(), error.getDefaultMessage()));
-		}
-		return result;
-	}
+
+    public ValidationErrorDto toValidationErrorDto(
+            Errors errors) {
+        ValidationErrorDto result = new ValidationErrorDto();
+        result.setErrorMessage(
+                String.format("Validation failed: %d error(s)", errors.getErrorCount()));
+        for (FieldError error : errors.getFieldErrors()) {
+            result.addValidationError(
+                    String.format("%s: %s", error.getField(), error.getDefaultMessage()));
+        }
+        return result;
+    }
 }

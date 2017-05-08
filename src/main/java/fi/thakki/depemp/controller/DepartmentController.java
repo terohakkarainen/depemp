@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import fi.thakki.depemp.dto.AddDepartmentDto;
+import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.DepartmentListDto;
-import fi.thakki.depemp.dto.ResponseDtoBase;
 import fi.thakki.depemp.dto.ValidationErrorDto;
 import fi.thakki.depemp.service.DepartmentService;
 import fi.thakki.depemp.service.DepartmentService.DepartmentNotFoundException;
@@ -59,17 +59,12 @@ public class DepartmentController {
 
     @RequestMapping(value = "/departments/{id}", method = RequestMethod.GET)
     public ResponseEntity<DepartmentDetailsDto> getDepartment(
-            @PathVariable Long id) {
-        // TODO: exception handling externally.
-        try {
-            return ResponseEntity.ok(myDepartmentService.getDepartment(id));
-        } catch (DepartmentNotFoundException dnfe) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+            @PathVariable Long id) throws DepartmentNotFoundException {
+        return ResponseEntity.ok(myDepartmentService.getDepartment(id));
     }
 
     @RequestMapping(value = "/departments", method = RequestMethod.POST)
-    public ResponseEntity<? extends ResponseDtoBase> addDepartment(
+    public ResponseEntity<DepartmentAddedDto> addDepartment(
             @Valid @RequestBody AddDepartmentDto department,
             Errors errors) {
         if (errors.hasErrors()) {
@@ -78,10 +73,17 @@ public class DepartmentController {
         return ResponseEntity.ok(myDepartmentService.addDepartment(department));
     }
 
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> handleException(
+            DepartmentNotFoundException dnfe) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(ValidationFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ValidationErrorDto handle(
+    public ValidationErrorDto handleException(
             ValidationFailedException vfe) {
         return myValidationErrorTransformer.toValidationErrorDto(vfe.getErrors());
     }
