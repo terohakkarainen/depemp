@@ -1,5 +1,5 @@
 package fi.thakki.depemp.dto;
 
-public class ResponseDtoBase {
+public abstract class ResponseDtoBase {
 	// Nothing.
 }
