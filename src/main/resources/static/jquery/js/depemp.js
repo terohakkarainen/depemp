@@ -15,9 +15,9 @@ function updateDepartmentList() {
       let tr;
       let table = $("#departmentsTable");
       table.find("tbody tr").remove();
-      for(let i = 0; i < data.length; i++) {
+      for(let i = 0; i < data.departments.length; i++) {
         tr = $('<tr/>');
-        tr.append("<td>" + data[i].name + "</td>");
+        tr.append("<td>" + data.departments[i].name + "</td>");
         table.find("tbody").append(tr);
       }
     }

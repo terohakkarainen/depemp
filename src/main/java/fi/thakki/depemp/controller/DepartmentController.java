@@ -1,7 +1,5 @@
 package fi.thakki.depemp.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
-import fi.thakki.depemp.dto.DepartmentListDto;
+import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.dto.ValidationErrorDto;
 import fi.thakki.depemp.service.DepartmentService;
 import fi.thakki.depemp.service.DepartmentService.DepartmentNotFoundException;
@@ -53,7 +51,7 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "/departments", method = RequestMethod.GET)
-    public List<DepartmentListDto> listDepartments() {
+    public ListDepartmentsDto listDepartments() {
         return myDepartmentService.listDepartments();
     }
 

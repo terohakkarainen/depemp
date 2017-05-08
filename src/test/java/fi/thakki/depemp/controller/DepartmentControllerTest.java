@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -19,6 +18,7 @@ import fi.thakki.depemp.Application;
 import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
+import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.dto.ValidationErrorDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.model.EntityFactory;
@@ -38,16 +38,16 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void getAllDepartments() throws Exception {
         String name = randomString(Department.NAME_LENGTH);
-        String desc = randomString(Department.DESCRIPTION_LENGTH);
-        Department department = new DepartmentBuilder().name(name).description(desc).get();
+        Department department = new DepartmentBuilder().name(name).get();
         myEntityFactory.persist(department);
 
-        ResponseEntity<String> result = myRestTemplate.getForEntity("/departments", String.class);
+        ResponseEntity<ListDepartmentsDto> result = myRestTemplate.getForEntity("/departments",
+                ListDepartmentsDto.class);
 
-        // TODO
         assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
-        JSONAssert.assertEquals(String.format("[{\"id\":1,\"name\":\"%s\"}]", name),
-                result.getBody(), true);
+        ListDepartmentsDto departmentList = result.getBody();
+        assertThat(departmentList.departments.size()).isEqualTo(1);
+        assertThat(departmentList.departments.get(0).name).isEqualTo(name);
     }
 
     @Test
@@ -71,18 +71,17 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     public void getNonExistingDepartment() throws Exception {
         ResponseEntity<String> result = myRestTemplate.getForEntity("/departments/-100",
                 String.class);
-
         assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void addNewDepartment() throws Exception {
         String name = randomString(Department.NAME_LENGTH);
-        String description = randomString(Department.DESCRIPTION_LENGTH);
-        
+        String desc = randomString(Department.DESCRIPTION_LENGTH);
+
         AddDepartmentDto addDto = new AddDepartmentDto();
         addDto.setName(name);
-        addDto.setDescription(description);
+        addDto.setDescription(desc);
 
         ResponseEntity<DepartmentAddedDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, DepartmentAddedDto.class);
@@ -95,13 +94,13 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
             public void run() {
                 Department d = myGenericDao.find(newDepartmentId, Department.class);
                 assertThat(d.getName()).isEqualTo(name);
-                assertThat(d.getDescription()).isEqualTo(description);
+                assertThat(d.getDescription()).isEqualTo(desc);
             }
         });
     }
 
     @Test
-    public void addNewDepartmentFailsOnValidation() throws Exception {
+    public void addNewDepartmentFailsOnMissingName() throws Exception {
         AddDepartmentDto addDtoWithoutName = new AddDepartmentDto();
 
         ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
