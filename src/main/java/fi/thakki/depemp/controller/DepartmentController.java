@@ -21,6 +21,7 @@ import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.dto.ValidationErrorDto;
 import fi.thakki.depemp.service.DepartmentService;
 import fi.thakki.depemp.service.DepartmentService.DepartmentNotFoundException;
+import fi.thakki.depemp.service.DepartmentService.DuplicateDepartmentNameException;
 import fi.thakki.depemp.transformer.ValidationErrorTransformer;
 
 @RestController
@@ -64,7 +65,7 @@ public class DepartmentController {
     @RequestMapping(value = "/departments", method = RequestMethod.POST)
     public ResponseEntity<DepartmentAddedDto> addDepartment(
             @Valid @RequestBody AddDepartmentDto department,
-            Errors errors) {
+            Errors errors) throws DuplicateDepartmentNameException {
         if (errors.hasErrors()) {
             throw new ValidationFailedException(errors);
         }
@@ -73,9 +74,9 @@ public class DepartmentController {
 
     @ExceptionHandler(DepartmentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<?> handleException(
+    public void handleException(
             DepartmentNotFoundException dnfe) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // Nothing.
     }
 
     @ExceptionHandler(ValidationFailedException.class)
@@ -84,5 +85,12 @@ public class DepartmentController {
     public ValidationErrorDto handleException(
             ValidationFailedException vfe) {
         return myValidationErrorTransformer.toValidationErrorDto(vfe.getErrors());
+    }
+
+    @ExceptionHandler(DuplicateDepartmentNameException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public void handleException(
+            DuplicateDepartmentNameException ddne) {
+        // Nothing.
     }
 }

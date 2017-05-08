@@ -2,6 +2,8 @@ package fi.thakki.depemp.service;
 
 import java.util.stream.Collectors;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +19,11 @@ import fi.thakki.depemp.transformer.DepartmentTransformer;
 public class DepartmentService {
 
     public static class DepartmentNotFoundException extends Exception {
-        // Nothing
+        // Nothing.
+    }
+
+    public static class DuplicateDepartmentNameException extends Exception {
+        // Nothing.
     }
 
     private GenericDao myGenericDao;
@@ -48,13 +54,23 @@ public class DepartmentService {
         throw new DepartmentNotFoundException();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = DuplicateDepartmentNameException.class)
     public DepartmentAddedDto addDepartment(
-            AddDepartmentDto dto) {
-        DepartmentAddedDto result = new DepartmentAddedDto();
-        Department department = myTransformer.toDepartment(dto);
-        myGenericDao.persist(department);
-        result.id = department.getId();
-        return result;
+            AddDepartmentDto dto) throws DuplicateDepartmentNameException {
+        try {
+            DepartmentAddedDto result = new DepartmentAddedDto();
+            Department department = myTransformer.toDepartment(dto);
+            myGenericDao.persist(department);
+            result.id = department.getId();
+            return result;
+        } catch (JpaSystemException jse) {
+            if (jse.contains(ConstraintViolationException.class)) {
+                // Assume constraint violation refers to name uniqueness. If
+                // other constraints are defined in the future, refactor this
+                // code to be more specific.
+                throw new DuplicateDepartmentNameException();
+            }
+            throw jse;
+        }
     }
 }

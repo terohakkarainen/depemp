@@ -26,7 +26,7 @@ public class Department {
 		myId = id;
 	}
 
-	@Column(name="name", nullable=false, length=NAME_LENGTH)
+	@Column(name="name", nullable=false, unique=true, length=NAME_LENGTH)
 	public String getName() {
 		return myName;
 	}

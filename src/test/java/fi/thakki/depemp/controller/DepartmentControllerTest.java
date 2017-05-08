@@ -44,7 +44,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<ListDepartmentsDto> result = myRestTemplate.getForEntity("/departments",
                 ListDepartmentsDto.class);
 
-        assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         ListDepartmentsDto departmentList = result.getBody();
         assertThat(departmentList.departments.size()).isEqualTo(1);
         assertThat(departmentList.departments.get(0).name).isEqualTo(name);
@@ -60,7 +60,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<DepartmentDetailsDto> result = myRestTemplate
                 .getForEntity("/departments/" + department.getId(), DepartmentDetailsDto.class);
 
-        assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         DepartmentDetailsDto details = result.getBody();
         assertThat(details.id).isGreaterThan(0);
         assertThat(details.name).isEqualTo(name);
@@ -71,7 +71,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     public void getNonExistingDepartment() throws Exception {
         ResponseEntity<String> result = myRestTemplate.getForEntity("/departments/-100",
                 String.class);
-        assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<DepartmentAddedDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, DepartmentAddedDto.class);
 
-        assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         final long newDepartmentId = result.getBody().id;
 
         assertions(new Runnable() {
@@ -106,10 +106,24 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
                 addDtoWithoutName, ValidationErrorDto.class);
 
-        assertThat(result.getStatusCode().value()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         ValidationErrorDto error = result.getBody();
         assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
         assertThat(error.getErrors()).contains("name: may not be null");
+    }
+
+    @Test
+    public void addNewDepartmentFailsOnDuplicateName() throws Exception {
+        AddDepartmentDto addDto = new AddDepartmentDto();
+        addDto.setName(randomString(Department.NAME_LENGTH));
+
+        ResponseEntity<DepartmentAddedDto> firstResult = myRestTemplate
+                .postForEntity("/departments", addDto, DepartmentAddedDto.class);
+        assertThat(firstResult.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        ResponseEntity<DepartmentAddedDto> secondResult = myRestTemplate
+                .postForEntity("/departments", addDto, DepartmentAddedDto.class);
+        assertThat(secondResult.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
     }
 
     private static final String randomString(
