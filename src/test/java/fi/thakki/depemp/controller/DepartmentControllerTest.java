@@ -157,6 +157,24 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         assertThat(secondResult.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
     }
 
+    @Test
+    public void addNewDepartmentFailsOnTooLongNameAndDescription() throws Exception {
+        AddDepartmentDto addDto = new AddDepartmentDto();
+        addDto.setName(randomString(Department.NAME_LENGTH + 1));
+        addDto.setDescription(randomString(Department.DESCRIPTION_LENGTH + 1));
+
+        ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
+                addDto, ValidationErrorDto.class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        ValidationErrorDto error = result.getBody();
+        assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 2 error(s)");
+        assertThat(error.getErrors()).contains(String.format(
+                "name: size must be between 1 and %d", Department.NAME_LENGTH));
+        assertThat(error.getErrors()).contains(String.format(
+                "description: size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
+    }
+    
     private static final String randomString() {
         return randomString(5);
     }
