@@ -45,6 +45,8 @@ function refreshDepartments() {
 
 function formToJsonString(form) {
   var jsonData = {};
-  form.serializeArray().map(function(x){jsonData[x.name] = x.value;});
+  form.serializeArray().map(function(x) { 
+    jsonData[x.name] = x.value;
+  });
   return jsonData;
 }
