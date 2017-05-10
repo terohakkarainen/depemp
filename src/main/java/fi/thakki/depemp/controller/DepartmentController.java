@@ -76,7 +76,7 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void handleException(
             DepartmentNotFoundException dnfe) {
-        // Nothing.
+        // TODO: relate information about cause of not-found.
     }
 
     @ExceptionHandler(ValidationFailedException.class)
@@ -91,6 +91,6 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.CONFLICT)
     public void handleException(
             DuplicateDepartmentNameException ddne) {
-        // Nothing.
+        // TODO: relate information about cause of conflict.
     }
 }

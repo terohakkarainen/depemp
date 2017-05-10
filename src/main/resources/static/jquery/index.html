@@ -14,7 +14,7 @@
   </div>
   
   <div id="contents">
-    Departments | <a id="updateLink" href="#">update</a><br/>
+    Departments | <a id="refreshDepartmentsLink" href="#">refresh</a><br/>
     <table id="departmentsTable">
       <thead>
         <tr>
@@ -23,6 +23,11 @@
       </thead>
       <tbody/>
     </table><br/>
+    <form id="addDepartmentForm" action="/departments" method="post">
+      Name:<input type="text" name="name"><br/>
+      Description:<input type="text" name="description"></br/>
+      <input type="submit" value="Add">
+    </form>
   </div>
   
   <div id="footer">
