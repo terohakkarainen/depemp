@@ -18,11 +18,11 @@ import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ListDepartmentsDto;
-import fi.thakki.depemp.dto.ValidationErrorDto;
+import fi.thakki.depemp.dto.ErrorResponseDto;
 import fi.thakki.depemp.service.DepartmentService;
 import fi.thakki.depemp.service.DepartmentService.DepartmentNotFoundException;
 import fi.thakki.depemp.service.DepartmentService.DuplicateDepartmentNameException;
-import fi.thakki.depemp.transformer.ValidationErrorTransformer;
+import fi.thakki.depemp.transformer.ErrorResponseTransformer;
 
 @RestController
 public class DepartmentController {
@@ -42,13 +42,13 @@ public class DepartmentController {
     }
 
     private DepartmentService myDepartmentService;
-    private ValidationErrorTransformer myValidationErrorTransformer;
+    private ErrorResponseTransformer myErrorResponseTransformer;
 
     public DepartmentController(
             DepartmentService departmentService,
-            ValidationErrorTransformer validationErrorTransformer) {
+            ErrorResponseTransformer errorResponseTransformer) {
         myDepartmentService = departmentService;
-        myValidationErrorTransformer = validationErrorTransformer;
+        myErrorResponseTransformer = errorResponseTransformer;
     }
 
     @RequestMapping(value = "/departments", method = RequestMethod.GET)
@@ -74,23 +74,27 @@ public class DepartmentController {
 
     @ExceptionHandler(DepartmentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleException(
+    @ResponseBody
+    public ErrorResponseDto handleException(
             DepartmentNotFoundException dnfe) {
-        // TODO: relate information about cause of not-found.
+        return myErrorResponseTransformer
+                .toErrorResponseDto("No department found with such id");
     }
 
     @ExceptionHandler(ValidationFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ValidationErrorDto handleException(
+    public ErrorResponseDto handleException(
             ValidationFailedException vfe) {
-        return myValidationErrorTransformer.toValidationErrorDto(vfe.getErrors());
+        return myErrorResponseTransformer.toErrorResponseDto(vfe.getErrors());
     }
 
     @ExceptionHandler(DuplicateDepartmentNameException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public void handleException(
+    @ResponseBody
+    public ErrorResponseDto handleException(
             DuplicateDepartmentNameException ddne) {
-        // TODO: relate information about cause of conflict.
+        return myErrorResponseTransformer
+                .toErrorResponseDto("Department with exact same name already exists");
     }
 }

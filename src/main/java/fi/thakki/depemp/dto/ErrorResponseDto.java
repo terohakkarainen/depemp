@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-public class ValidationErrorDto {
+public class ErrorResponseDto {
 
     private String myErrorMessage;
     
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<String> myErrors = new ArrayList<>();
+    private List<String> myDetails = new ArrayList<>();
 
     public String getErrorMessage() {
         return myErrorMessage;
@@ -20,15 +20,15 @@ public class ValidationErrorDto {
         myErrorMessage = msg;
     }
     
-    public List<String> getErrors() {
-        return myErrors;
+    public List<String> getDetails() {
+        return myDetails;
     }
 
-    public void setErrors(List<String> errors) {
-        myErrors.addAll(errors);
+    public void setDetails(List<String> details) {
+        myDetails.addAll(details);
     }
     
-    public void addValidationError(String error) {
-        myErrors.add(error);
+    public void addDetail(String details) {
+        myDetails.add(details);
     }
 }

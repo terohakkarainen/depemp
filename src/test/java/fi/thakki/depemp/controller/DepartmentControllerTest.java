@@ -19,7 +19,7 @@ import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ListDepartmentsDto;
-import fi.thakki.depemp.dto.ValidationErrorDto;
+import fi.thakki.depemp.dto.ErrorResponseDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.model.EntityFactory;
 import fi.thakki.depemp.model.builder.DepartmentBuilder;
@@ -69,9 +69,10 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void getNonExistingDepartment() throws Exception {
-        ResponseEntity<String> result = myRestTemplate.getForEntity("/departments/-100",
-                String.class);
+        ResponseEntity<ErrorResponseDto> result = myRestTemplate.getForEntity("/departments/-100",
+                ErrorResponseDto.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(result.getBody().getErrorMessage()).isEqualTo("No department found with such id");
     }
 
     @Test
@@ -103,13 +104,13 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     public void addNewDepartmentFailsOnMissingName() throws Exception {
         AddDepartmentDto addDtoWithoutName = new AddDepartmentDto();
 
-        ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
-                addDtoWithoutName, ValidationErrorDto.class);
+        ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
+                addDtoWithoutName, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        ValidationErrorDto error = result.getBody();
+        ErrorResponseDto error = result.getBody();
         assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
-        assertThat(error.getErrors()).contains("name: may not be null");
+        assertThat(error.getDetails()).contains("name: may not be null");
     }
 
     @Test
@@ -117,13 +118,13 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         AddDepartmentDto addDto = new AddDepartmentDto();
         addDto.setName(randomString(Department.NAME_LENGTH + 1));
 
-        ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
-                addDto, ValidationErrorDto.class);
+        ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
+                addDto, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        ValidationErrorDto error = result.getBody();
+        ErrorResponseDto error = result.getBody();
         assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
-        assertThat(error.getErrors()).contains(
+        assertThat(error.getDetails()).contains(
                 String.format("name: size must be between 1 and %d", Department.NAME_LENGTH));
     }
 
@@ -133,13 +134,13 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         addDto.setName(randomString());
         addDto.setDescription(randomString(Department.DESCRIPTION_LENGTH + 1));
 
-        ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
-                addDto, ValidationErrorDto.class);
+        ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
+                addDto, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        ValidationErrorDto error = result.getBody();
+        ErrorResponseDto error = result.getBody();
         assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
-        assertThat(error.getErrors()).contains(String.format(
+        assertThat(error.getDetails()).contains(String.format(
                 "description: size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
     }
 
@@ -148,13 +149,14 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         AddDepartmentDto addDto = new AddDepartmentDto();
         addDto.setName(randomString(Department.NAME_LENGTH));
 
-        ResponseEntity<DepartmentAddedDto> firstResult = myRestTemplate
+        ResponseEntity<DepartmentAddedDto> succeedingAdd = myRestTemplate
                 .postForEntity("/departments", addDto, DepartmentAddedDto.class);
-        assertThat(firstResult.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(succeedingAdd.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        ResponseEntity<DepartmentAddedDto> secondResult = myRestTemplate
-                .postForEntity("/departments", addDto, DepartmentAddedDto.class);
-        assertThat(secondResult.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        ResponseEntity<ErrorResponseDto> failingAdd = myRestTemplate
+                .postForEntity("/departments", addDto, ErrorResponseDto.class);
+        assertThat(failingAdd.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(failingAdd.getBody().getErrorMessage()).isEqualTo("Department with exact same name already exists");
     }
 
     @Test
@@ -163,15 +165,15 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         addDto.setName(randomString(Department.NAME_LENGTH + 1));
         addDto.setDescription(randomString(Department.DESCRIPTION_LENGTH + 1));
 
-        ResponseEntity<ValidationErrorDto> result = myRestTemplate.postForEntity("/departments",
-                addDto, ValidationErrorDto.class);
+        ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
+                addDto, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        ValidationErrorDto error = result.getBody();
+        ErrorResponseDto error = result.getBody();
         assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 2 error(s)");
-        assertThat(error.getErrors()).contains(String.format(
+        assertThat(error.getDetails()).contains(String.format(
                 "name: size must be between 1 and %d", Department.NAME_LENGTH));
-        assertThat(error.getErrors()).contains(String.format(
+        assertThat(error.getDetails()).contains(String.format(
                 "description: size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
     }
     
