@@ -1,5 +1,7 @@
 package fi.thakki.depemp.transformer;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -15,10 +17,10 @@ public class ErrorResponseTransformer {
     public ErrorResponseDto toErrorResponseDto(
             Errors errors) {
         ErrorResponseDto result = new ErrorResponseDto();
-        result.setErrorMessage(
-                String.format(VALIDATION_ERROR_FORMAT, errors.getErrorCount()));
+        result.setErrorMessage(String.format(VALIDATION_ERROR_FORMAT, errors.getErrorCount()));
         for (FieldError error : errors.getFieldErrors()) {
-            result.addDetail(String.format(VALIDATION_DETAIL_FORMAT, error.getField(), error.getDefaultMessage()));
+            result.addDetail(String.format(VALIDATION_DETAIL_FORMAT, error.getField(),
+                    error.getDefaultMessage()));
         }
         return result;
     }
@@ -27,6 +29,15 @@ public class ErrorResponseTransformer {
             String message) {
         ErrorResponseDto result = new ErrorResponseDto();
         result.setErrorMessage(message);
+        return result;
+    }
+
+    public ErrorResponseDto toErrorResponseDto(
+            String message,
+            String... details) {
+        ErrorResponseDto result = new ErrorResponseDto();
+        result.setErrorMessage(message);
+        Arrays.asList(details).stream().forEach(s -> result.addDetail(s));
         return result;
     }
 }

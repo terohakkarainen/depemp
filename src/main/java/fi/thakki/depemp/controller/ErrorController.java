@@ -15,7 +15,7 @@ import fi.thakki.depemp.transformer.ErrorResponseTransformer;
 @RestController
 public class ErrorController {
 
-    static final String ERROR_MESSAGE_FORMAT = "Uh-oh, something strange happened: %s";
+    static final String ERROR_MESSAGE_FORMAT = "Uh-oh, something strange happened...";
 
     @Autowired
     private ErrorResponseTransformer myErrorResponseTransformer;
@@ -26,6 +26,6 @@ public class ErrorController {
     public ErrorResponseDto handleThrowable(
             Throwable t) {
         return myErrorResponseTransformer
-                .toErrorResponseDto(String.format(ERROR_MESSAGE_FORMAT, t.getMessage()));
+                .toErrorResponseDto(ERROR_MESSAGE_FORMAT, t.getMessage());
     }
 }
