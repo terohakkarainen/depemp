@@ -11,26 +11,31 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GenericDao {
 
-	private EntityManager myEm;
+    private EntityManager myEm;
 
-	public GenericDao(EntityManager entityManager) {
-		myEm = entityManager;
-	}
-	
-    public <T> List<T> findAll(Class<T> clazz) {
+    public GenericDao(
+            EntityManager entityManager) {
+        myEm = entityManager;
+    }
+
+    public <T> List<T> findAll(
+            Class<T> clazz) {
         CriteriaQuery<T> query = criteriaBuilder().createQuery(clazz);
         return myEm.createQuery(query.select(query.from(clazz))).getResultList();
     }
 
-	public <T> T find(final Long id, final Class<T> clazz) {
-		return myEm.find(clazz, id);
-	}
-	
-	private CriteriaBuilder criteriaBuilder() {
-		return myEm.getCriteriaBuilder();
-	}
-	
-	public void persist(Object obj) {
-		myEm.persist(obj);
-	}
+    public <T> T find(
+            final Long id,
+            final Class<T> clazz) {
+        return myEm.find(clazz, id);
+    }
+
+    private CriteriaBuilder criteriaBuilder() {
+        return myEm.getCriteriaBuilder();
+    }
+
+    public void persist(
+            Object obj) {
+        myEm.persist(obj);
+    }
 }

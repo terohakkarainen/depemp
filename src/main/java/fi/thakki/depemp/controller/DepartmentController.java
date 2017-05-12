@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
-import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.dto.ErrorResponseDto;
+import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.service.DepartmentService;
 import fi.thakki.depemp.service.DepartmentService.DepartmentNotFoundException;
 import fi.thakki.depemp.service.DepartmentService.DuplicateDepartmentNameException;
@@ -26,6 +26,9 @@ import fi.thakki.depemp.transformer.ErrorResponseTransformer;
 
 @RestController
 public class DepartmentController {
+
+    static final String ERROR_NO_DEPARTMENT_FOUND = "No department found with such id";
+    static final String ERROR_DUPLICATE_DEPARTMENT_NAME = "Department with exact same name already exists";
 
     private static class ValidationFailedException extends RuntimeException {
 
@@ -78,7 +81,7 @@ public class DepartmentController {
     public ErrorResponseDto handleException(
             DepartmentNotFoundException dnfe) {
         return myErrorResponseTransformer
-                .toErrorResponseDto("No department found with such id");
+                .toErrorResponseDto(ERROR_NO_DEPARTMENT_FOUND);
     }
 
     @ExceptionHandler(ValidationFailedException.class)
@@ -95,6 +98,6 @@ public class DepartmentController {
     public ErrorResponseDto handleException(
             DuplicateDepartmentNameException ddne) {
         return myErrorResponseTransformer
-                .toErrorResponseDto("Department with exact same name already exists");
+                .toErrorResponseDto(ERROR_DUPLICATE_DEPARTMENT_NAME);
     }
 }

@@ -2,7 +2,6 @@ package fi.thakki.depemp.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,13 @@ import fi.thakki.depemp.Application;
 import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
-import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.dto.ErrorResponseDto;
+import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.model.EntityFactory;
 import fi.thakki.depemp.model.builder.DepartmentBuilder;
+import fi.thakki.depemp.transformer.ErrorResponseTransformer;
+import fi.thakki.depemp.util.StringUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -37,7 +38,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void getAllDepartments() throws Exception {
-        String name = randomString(Department.NAME_LENGTH);
+        String name = StringUtil.randomString(Department.NAME_LENGTH);
         Department department = new DepartmentBuilder().name(name).get();
         myEntityFactory.persist(department);
 
@@ -52,8 +53,8 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void getExistingDepartment() throws Exception {
-        String name = randomString(Department.NAME_LENGTH);
-        String desc = randomString(Department.DESCRIPTION_LENGTH);
+        String name = StringUtil.randomString(Department.NAME_LENGTH);
+        String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
         Department department = new DepartmentBuilder().name(name).description(desc).get();
         myEntityFactory.persist(department);
 
@@ -72,13 +73,14 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.getForEntity("/departments/-100",
                 ErrorResponseDto.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(result.getBody().getErrorMessage()).isEqualTo("No department found with such id");
+        assertThat(result.getBody().getErrorMessage())
+                .isEqualTo(DepartmentController.ERROR_NO_DEPARTMENT_FOUND);
     }
 
     @Test
     public void addNewDepartment() throws Exception {
-        String name = randomString(Department.NAME_LENGTH);
-        String desc = randomString(Department.DESCRIPTION_LENGTH);
+        String name = StringUtil.randomString(Department.NAME_LENGTH);
+        String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
 
         AddDepartmentDto addDto = new AddDepartmentDto();
         addDto.setName(name);
@@ -109,80 +111,88 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         ErrorResponseDto error = result.getBody();
-        assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
-        assertThat(error.getDetails()).contains("name: may not be null");
+        assertValidationErrorCount(error, 1);
+        assertValidationDetail(error, "name", "may not be null");
     }
 
     @Test
     public void addNewDepartmentFailsOnTooLongName() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(randomString(Department.NAME_LENGTH + 1));
+        addDto.setName(StringUtil.randomString(Department.NAME_LENGTH + 1));
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         ErrorResponseDto error = result.getBody();
-        assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
-        assertThat(error.getDetails()).contains(
-                String.format("name: size must be between 1 and %d", Department.NAME_LENGTH));
+        assertValidationErrorCount(error, 1);
+        assertValidationDetail(error, "name",
+                String.format("size must be between 1 and %d", Department.NAME_LENGTH));
     }
 
     @Test
     public void addNewDepartmentFailsOnTooLongDescription() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(randomString());
-        addDto.setDescription(randomString(Department.DESCRIPTION_LENGTH + 1));
+        addDto.setName(StringUtil.randomString());
+        addDto.setDescription(StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1));
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         ErrorResponseDto error = result.getBody();
-        assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
-        assertThat(error.getDetails()).contains(String.format(
-                "description: size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
+        assertValidationErrorCount(error, 1);
+        assertValidationDetail(error, "description",
+                String.format("size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
     }
 
     @Test
     public void addNewDepartmentFailsOnDuplicateName() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(randomString(Department.NAME_LENGTH));
+        addDto.setName(StringUtil.randomString(Department.NAME_LENGTH));
 
         ResponseEntity<DepartmentAddedDto> succeedingAdd = myRestTemplate
                 .postForEntity("/departments", addDto, DepartmentAddedDto.class);
         assertThat(succeedingAdd.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        ResponseEntity<ErrorResponseDto> failingAdd = myRestTemplate
-                .postForEntity("/departments", addDto, ErrorResponseDto.class);
+        ResponseEntity<ErrorResponseDto> failingAdd = myRestTemplate.postForEntity("/departments",
+                addDto, ErrorResponseDto.class);
         assertThat(failingAdd.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(failingAdd.getBody().getErrorMessage()).isEqualTo("Department with exact same name already exists");
+        assertThat(failingAdd.getBody().getErrorMessage())
+                .isEqualTo(DepartmentController.ERROR_DUPLICATE_DEPARTMENT_NAME);
     }
 
     @Test
     public void addNewDepartmentFailsOnTooLongNameAndDescription() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(randomString(Department.NAME_LENGTH + 1));
-        addDto.setDescription(randomString(Department.DESCRIPTION_LENGTH + 1));
+        addDto.setName(StringUtil.randomString(Department.NAME_LENGTH + 1));
+        addDto.setDescription(StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1));
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         ErrorResponseDto error = result.getBody();
-        assertThat(error.getErrorMessage()).isEqualTo("Validation failed: 2 error(s)");
-        assertThat(error.getDetails()).contains(String.format(
-                "name: size must be between 1 and %d", Department.NAME_LENGTH));
-        assertThat(error.getDetails()).contains(String.format(
-                "description: size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
-    }
-    
-    private static final String randomString() {
-        return randomString(5);
+
+        assertValidationErrorCount(error, 2);
+        assertValidationDetail(error, "name",
+                String.format("size must be between 1 and %d", Department.NAME_LENGTH));
+        assertValidationDetail(error, "description",
+                String.format("size must be between 0 and %d", Department.DESCRIPTION_LENGTH));
     }
 
-    private static final String randomString(
-            int length) {
-        return RandomStringUtils.randomAlphanumeric(length);
+    private static void assertValidationErrorCount(
+            ErrorResponseDto errorDto,
+            int expectedCount) {
+        assertThat(errorDto.getErrorMessage()).isEqualTo(
+                String.format(ErrorResponseTransformer.VALIDATION_ERROR_FORMAT, expectedCount));
+    }
+
+    private static void assertValidationDetail(
+            ErrorResponseDto errorDto,
+            String fieldName,
+            String expectedDetail) {
+        assertThat(errorDto.getDetails()).contains(String.format(
+                ErrorResponseTransformer.VALIDATION_DETAIL_FORMAT, fieldName, expectedDetail));
     }
 }
