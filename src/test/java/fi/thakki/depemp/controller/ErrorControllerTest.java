@@ -1,7 +1,6 @@
 package fi.thakki.depemp.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -38,14 +37,15 @@ public class ErrorControllerTest {
 
     @Test
     public void testFoo() throws Exception {
-        Department d = new DepartmentBuilder().name("foo").get();
+        String departmentName = "foo";
+        Department d = new DepartmentBuilder().name(departmentName).get();
         Mockito.when(myMockedGenericDao.findAll(Department.class))
                 .thenReturn(Lists.newArrayList(d));
 
         List<Department> deps = myMockedGenericDao.findAll(Department.class);
 
-        assertEquals(1, deps.size());
-        assertEquals("foo", deps.get(0).getName());
+        assertThat(deps.size()).isEqualTo(1);
+        assertThat(deps.get(0).getName()).isEqualTo(departmentName);
     }
     
     @Test
