@@ -1,5 +1,6 @@
 package fi.thakki.depemp.service;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -47,11 +48,9 @@ public class DepartmentService {
     @Transactional(readOnly = true)
     public DepartmentDetailsDto getDepartment(
             Long id) throws DepartmentNotFoundException {
-        Department department = myGenericDao.find(id, Department.class);
-        if (department != null) {
-            return myTransformer.toDetailsDto(department);
-        }
-        throw new DepartmentNotFoundException();
+        Optional<Department> optDepartment = myGenericDao.find(id, Department.class);
+        return myTransformer
+                .toDetailsDto(optDepartment.orElseThrow(DepartmentNotFoundException::new));
     }
 
     @Transactional(rollbackFor = DuplicateDepartmentNameException.class)

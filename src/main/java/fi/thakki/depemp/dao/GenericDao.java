@@ -1,6 +1,7 @@
 package fi.thakki.depemp.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,10 +25,10 @@ public class GenericDao {
         return myEm.createQuery(query.select(query.from(clazz))).getResultList();
     }
 
-    public <T> T find(
+    public <T> Optional<T> find(
             final Long id,
             final Class<T> clazz) {
-        return myEm.find(clazz, id);
+        return Optional.ofNullable(myEm.find(clazz, id));
     }
 
     private CriteriaBuilder criteriaBuilder() {

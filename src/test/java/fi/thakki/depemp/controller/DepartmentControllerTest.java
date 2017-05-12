@@ -2,6 +2,8 @@ package fi.thakki.depemp.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,9 +97,11 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         assertions(new Runnable() {
             @Override
             public void run() {
-                Department department = myGenericDao.find(newDepartmentId, Department.class);
-                assertThat(department.getName()).isEqualTo(name);
-                assertThat(department.getDescription()).isEqualTo(desc);
+                Optional<Department> optDepartment = myGenericDao.find(newDepartmentId,
+                        Department.class);
+                assertThat(optDepartment.isPresent()).isTrue();
+                assertThat(optDepartment.get().getName()).isEqualTo(name);
+                assertThat(optDepartment.get().getDescription()).isEqualTo(desc);
             }
         });
     }
