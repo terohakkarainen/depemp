@@ -1,7 +1,7 @@
 URL					Method			Description												Done
 ===================================================================================================
 /departments		GET				All departments in system								x
-/departments		POST			Create new department into system
+/departments		POST			Create new department into system						x
 
 /departments/{id}	GET				Department with given id								x
 /departments/{id}	PUT				Update department with given id

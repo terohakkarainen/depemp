@@ -1,5 +1,5 @@
+- E2E-test harness
 - Show validation error details in front.
 - Show AJAX query errors in front.
-- E2E-test harness
 - Replace greeting with something else in Angular -> get rid of Greeting classes.
 - Get all departments with specific columns (optimize query).
