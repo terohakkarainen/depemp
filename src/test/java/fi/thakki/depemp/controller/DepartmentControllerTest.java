@@ -91,7 +91,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<DepartmentAddedDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, DepartmentAddedDto.class);
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         final long newDepartmentId = result.getBody().id;
 
         assertions(new Runnable() {
@@ -157,7 +157,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
         ResponseEntity<DepartmentAddedDto> succeedingAdd = myRestTemplate
                 .postForEntity("/departments", addDto, DepartmentAddedDto.class);
-        assertThat(succeedingAdd.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(succeedingAdd.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         ResponseEntity<ErrorResponseDto> failingAdd = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);

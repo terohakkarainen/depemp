@@ -55,8 +55,8 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "/departments", method = RequestMethod.GET)
-    public ListDepartmentsDto listDepartments() {
-        return myDepartmentService.listDepartments();
+    public ResponseEntity<ListDepartmentsDto> listDepartments() {
+        return ResponseEntity.ok(myDepartmentService.listDepartments());
     }
 
     @RequestMapping(value = "/departments/{id}", method = RequestMethod.GET)
@@ -72,7 +72,8 @@ public class DepartmentController {
         if (errors.hasErrors()) {
             throw new ValidationFailedException(errors);
         }
-        return ResponseEntity.ok(myDepartmentService.addDepartment(department));
+        return new ResponseEntity<DepartmentAddedDto>(myDepartmentService.addDepartment(department),
+                HttpStatus.CREATED);
     }
 
     @ExceptionHandler(DepartmentNotFoundException.class)
@@ -80,8 +81,7 @@ public class DepartmentController {
     @ResponseBody
     public ErrorResponseDto handleException(
             DepartmentNotFoundException dnfe) {
-        return myErrorResponseTransformer
-                .toErrorResponseDto(ERROR_NO_DEPARTMENT_FOUND);
+        return myErrorResponseTransformer.toErrorResponseDto(ERROR_NO_DEPARTMENT_FOUND);
     }
 
     @ExceptionHandler(ValidationFailedException.class)
@@ -97,7 +97,6 @@ public class DepartmentController {
     @ResponseBody
     public ErrorResponseDto handleException(
             DuplicateDepartmentNameException ddne) {
-        return myErrorResponseTransformer
-                .toErrorResponseDto(ERROR_DUPLICATE_DEPARTMENT_NAME);
+        return myErrorResponseTransformer.toErrorResponseDto(ERROR_DUPLICATE_DEPARTMENT_NAME);
     }
 }
