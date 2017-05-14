@@ -9,34 +9,37 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.springframework.stereotype.Repository;
 
+import fi.thakki.depemp.model.Identifiable;
+
 @Repository
 public class GenericDao {
 
-    private EntityManager myEm;
+    private EntityManager myEntityManager;
 
     public GenericDao(
             EntityManager entityManager) {
-        myEm = entityManager;
+        myEntityManager = entityManager;
     }
 
     public <T> List<T> findAll(
             Class<T> clazz) {
         CriteriaQuery<T> query = criteriaBuilder().createQuery(clazz);
-        return myEm.createQuery(query.select(query.from(clazz))).getResultList();
+        return myEntityManager.createQuery(query.select(query.from(clazz))).getResultList();
+    }
+
+    private CriteriaBuilder criteriaBuilder() {
+        return myEntityManager.getCriteriaBuilder();
     }
 
     public <T> Optional<T> find(
             final Long id,
             final Class<T> clazz) {
-        return Optional.ofNullable(myEm.find(clazz, id));
+        return Optional.ofNullable(myEntityManager.find(clazz, id));
     }
 
-    private CriteriaBuilder criteriaBuilder() {
-        return myEm.getCriteriaBuilder();
-    }
-
-    public void persist(
-            Object obj) {
-        myEm.persist(obj);
+    public <T extends Identifiable> Long persist(
+            T entity) {
+        myEntityManager.persist(entity);
+        return entity.getId();
     }
 }

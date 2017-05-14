@@ -58,9 +58,7 @@ public class DepartmentService {
             AddDepartmentDto dto) throws DuplicateDepartmentNameException {
         try {
             DepartmentAddedDto result = new DepartmentAddedDto();
-            Department department = myTransformer.toDepartment(dto);
-            myGenericDao.persist(department);
-            result.id = department.getId();
+            result.id = myGenericDao.persist(myTransformer.toDepartment(dto));
             return result;
         } catch (JpaSystemException jse) {
             if (jse.contains(ConstraintViolationException.class)) {

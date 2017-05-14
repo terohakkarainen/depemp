@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Department {
+public class Department implements Identifiable {
 
 	public static final int NAME_LENGTH = LengthDomain.SHORT_DESCRIPTION;
 	public static final int DESCRIPTION_LENGTH = LengthDomain.LONG_DESCRIPTION;
@@ -16,7 +16,8 @@ public class Department {
 	private String myName;
 	private String myDescription;
 	
-	@Id
+	@Override
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
 	public Long getId() {
 		return myId;
