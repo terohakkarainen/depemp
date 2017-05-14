@@ -75,7 +75,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.getForEntity("/departments/-100",
                 ErrorResponseDto.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(result.getBody().getErrorMessage())
+        assertThat(result.getBody().errorMessage)
                 .isEqualTo(DepartmentController.ERROR_NO_DEPARTMENT_FOUND);
     }
 
@@ -85,8 +85,8 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
 
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(name);
-        addDto.setDescription(desc);
+        addDto.name = name;
+        addDto.description = desc;
 
         ResponseEntity<DepartmentAddedDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, DepartmentAddedDto.class);
@@ -122,7 +122,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void addNewDepartmentFailsOnTooLongName() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(StringUtil.randomString(Department.NAME_LENGTH + 1));
+        addDto.name = StringUtil.randomString(Department.NAME_LENGTH + 1);
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
@@ -137,8 +137,8 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void addNewDepartmentFailsOnTooLongDescription() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(StringUtil.randomString());
-        addDto.setDescription(StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1));
+        addDto.name = StringUtil.randomString();
+        addDto.description = StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1);
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
@@ -153,7 +153,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void addNewDepartmentFailsOnDuplicateName() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(StringUtil.randomString(Department.NAME_LENGTH));
+        addDto.name = StringUtil.randomString(Department.NAME_LENGTH);
 
         ResponseEntity<DepartmentAddedDto> succeedingAdd = myRestTemplate
                 .postForEntity("/departments", addDto, DepartmentAddedDto.class);
@@ -162,15 +162,15 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ResponseEntity<ErrorResponseDto> failingAdd = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
         assertThat(failingAdd.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(failingAdd.getBody().getErrorMessage())
+        assertThat(failingAdd.getBody().errorMessage)
                 .isEqualTo(DepartmentController.ERROR_DUPLICATE_DEPARTMENT_NAME);
     }
 
     @Test
     public void addNewDepartmentFailsOnTooLongNameAndDescription() throws Exception {
         AddDepartmentDto addDto = new AddDepartmentDto();
-        addDto.setName(StringUtil.randomString(Department.NAME_LENGTH + 1));
-        addDto.setDescription(StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1));
+        addDto.name = StringUtil.randomString(Department.NAME_LENGTH + 1);
+        addDto.description = StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1);
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDto, ErrorResponseDto.class);
@@ -188,7 +188,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     private static void assertValidationErrorCount(
             ErrorResponseDto errorDto,
             int expectedCount) {
-        assertThat(errorDto.getErrorMessage()).isEqualTo(
+        assertThat(errorDto.errorMessage).isEqualTo(
                 String.format(ErrorResponseTransformer.VALIDATION_ERROR_FORMAT, expectedCount));
     }
 
@@ -196,7 +196,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
             ErrorResponseDto errorDto,
             String fieldName,
             String expectedDetail) {
-        assertThat(errorDto.getDetails()).contains(String.format(
+        assertThat(errorDto.details).contains(String.format(
                 ErrorResponseTransformer.VALIDATION_DETAIL_FORMAT, fieldName, expectedDetail));
     }
 }

@@ -27,8 +27,8 @@ public class DepartmentTransformer {
 	
 	public Department toDepartment(AddDepartmentDto dto) {
 		Department result = new Department();
-		result.setName(dto.getName());
-		result.setDescription(dto.getDescription());
+		result.setName(dto.name);
+		result.setDescription(dto.description);
 		return result;
 	}
 }

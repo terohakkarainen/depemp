@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 
 import fi.thakki.depemp.dto.ErrorResponseDto;
 
@@ -17,18 +16,16 @@ public class ErrorResponseTransformer {
     public ErrorResponseDto toErrorResponseDto(
             Errors errors) {
         ErrorResponseDto result = new ErrorResponseDto();
-        result.setErrorMessage(String.format(VALIDATION_ERROR_FORMAT, errors.getErrorCount()));
-        for (FieldError error : errors.getFieldErrors()) {
-            result.addDetail(String.format(VALIDATION_DETAIL_FORMAT, error.getField(),
-                    error.getDefaultMessage()));
-        }
+        result.errorMessage = String.format(VALIDATION_ERROR_FORMAT, errors.getErrorCount());
+        errors.getFieldErrors().stream().forEach(e -> result.details
+                .add(String.format(VALIDATION_DETAIL_FORMAT, e.getField(), e.getDefaultMessage())));
         return result;
     }
 
     public ErrorResponseDto toErrorResponseDto(
             String message) {
         ErrorResponseDto result = new ErrorResponseDto();
-        result.setErrorMessage(message);
+        result.errorMessage = message;
         return result;
     }
 
@@ -36,8 +33,8 @@ public class ErrorResponseTransformer {
             String message,
             String... details) {
         ErrorResponseDto result = new ErrorResponseDto();
-        result.setErrorMessage(message);
-        Arrays.asList(details).stream().forEach(s -> result.addDetail(s));
+        result.errorMessage = message;
+        Arrays.asList(details).stream().forEach(s -> result.details.add(s));
         return result;
     }
 }

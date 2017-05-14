@@ -42,8 +42,8 @@ public class ErrorControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         ErrorResponseDto errorResult = result.getBody();
-        assertThat(errorResult.getErrorMessage()).isEqualTo(ErrorController.ERROR_MESSAGE_FORMAT);
-        assertThat(errorResult.getDetails().size()).isEqualTo(1);
-        assertThat(errorResult.getDetails()).contains(errorMessage);
+        assertThat(errorResult.errorMessage).isEqualTo(ErrorController.ERROR_MESSAGE_FORMAT);
+        assertThat(errorResult.details.size()).isEqualTo(1);
+        assertThat(errorResult.details).contains(errorMessage);
     }
 }
