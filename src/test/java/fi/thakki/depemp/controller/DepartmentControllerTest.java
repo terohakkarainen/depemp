@@ -16,7 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import fi.thakki.depemp.Application;
-import fi.thakki.depemp.dto.AddDepartmentDto;
+import fi.thakki.depemp.command.AddDepartmentCommand;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ErrorResponseDto;
@@ -84,7 +84,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
         String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
 
-        AddDepartmentDto addDto = new AddDepartmentDto();
+        AddDepartmentCommand addDto = new AddDepartmentCommand();
         addDto.name = name;
         addDto.description = desc;
 
@@ -108,7 +108,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void addNewDepartmentFailsOnMissingName() throws Exception {
-        AddDepartmentDto addDtoWithoutName = new AddDepartmentDto();
+        AddDepartmentCommand addDtoWithoutName = new AddDepartmentCommand();
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
                 addDtoWithoutName, ErrorResponseDto.class);
@@ -121,7 +121,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void addNewDepartmentFailsOnTooLongName() throws Exception {
-        AddDepartmentDto addDto = new AddDepartmentDto();
+        AddDepartmentCommand addDto = new AddDepartmentCommand();
         addDto.name = StringUtil.randomString(Department.NAME_LENGTH + 1);
 
         ResponseEntity<ErrorResponseDto> result = myRestTemplate.postForEntity("/departments",
@@ -136,7 +136,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void addNewDepartmentFailsOnTooLongDescription() throws Exception {
-        AddDepartmentDto addDto = new AddDepartmentDto();
+        AddDepartmentCommand addDto = new AddDepartmentCommand();
         addDto.name = StringUtil.randomString();
         addDto.description = StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1);
 
@@ -152,7 +152,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void addNewDepartmentFailsOnDuplicateName() throws Exception {
-        AddDepartmentDto addDto = new AddDepartmentDto();
+        AddDepartmentCommand addDto = new AddDepartmentCommand();
         addDto.name = StringUtil.randomString(Department.NAME_LENGTH);
 
         ResponseEntity<DepartmentAddedDto> succeedingAdd = myRestTemplate
@@ -168,7 +168,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
     @Test
     public void addNewDepartmentFailsOnTooLongNameAndDescription() throws Exception {
-        AddDepartmentDto addDto = new AddDepartmentDto();
+        AddDepartmentCommand addDto = new AddDepartmentCommand();
         addDto.name = StringUtil.randomString(Department.NAME_LENGTH + 1);
         addDto.description = StringUtil.randomString(Department.DESCRIPTION_LENGTH + 1);
 

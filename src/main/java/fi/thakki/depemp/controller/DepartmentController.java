@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import fi.thakki.depemp.dto.AddDepartmentDto;
+import fi.thakki.depemp.command.AddDepartmentCommand;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ListDepartmentsDto;
@@ -42,7 +42,7 @@ public class DepartmentController {
 
     @PostMapping("/departments")
     public ResponseEntity<DepartmentAddedDto> addDepartment(
-            @Valid @RequestBody AddDepartmentDto department,
+            @Valid @RequestBody AddDepartmentCommand department,
             Errors errors) throws DuplicateDepartmentNameException {
         if (errors.hasErrors()) {
             throw new ValidationFailedException(errors);

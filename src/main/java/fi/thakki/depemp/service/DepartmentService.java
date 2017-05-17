@@ -8,8 +8,8 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fi.thakki.depemp.command.AddDepartmentCommand;
 import fi.thakki.depemp.dao.GenericDao;
-import fi.thakki.depemp.dto.AddDepartmentDto;
 import fi.thakki.depemp.dto.DepartmentAddedDto;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ListDepartmentsDto;
@@ -55,10 +55,10 @@ public class DepartmentService {
 
     @Transactional(rollbackFor = DuplicateDepartmentNameException.class)
     public DepartmentAddedDto addDepartment(
-            AddDepartmentDto dto) throws DuplicateDepartmentNameException {
+            AddDepartmentCommand command) throws DuplicateDepartmentNameException {
         try {
             DepartmentAddedDto result = new DepartmentAddedDto();
-            result.id = myGenericDao.persist(myTransformer.toDepartment(dto));
+            result.id = myGenericDao.persist(myTransformer.toDepartment(command));
             return result;
         } catch (JpaSystemException jse) {
             if (jse.contains(ConstraintViolationException.class)) {
