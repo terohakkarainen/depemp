@@ -65,7 +65,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         DepartmentDetailsDto details = result.getBody();
-        assertThat(details.id).isGreaterThan(0);
+        assertThat(details.id.longValue()).isGreaterThan(0);
         assertThat(details.name).isEqualTo(name);
         assertThat(details.description).isEqualTo(desc);
     }
@@ -92,7 +92,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
                 addDto, DepartmentAddedDto.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        final long newDepartmentId = result.getBody().id;
+        final long newDepartmentId = result.getBody().id.longValue();
 
         assertions(new Runnable() {
             @Override

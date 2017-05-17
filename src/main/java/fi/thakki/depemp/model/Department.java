@@ -9,39 +9,42 @@ import javax.persistence.Id;
 @Entity
 public class Department implements Identifiable {
 
-	public static final int NAME_LENGTH = LengthDomain.SHORT_DESCRIPTION;
-	public static final int DESCRIPTION_LENGTH = LengthDomain.LONG_DESCRIPTION;
-	
-	private Long myId;
-	private String myName;
-	private String myDescription;
-	
-	@Override
+    public static final int NAME_LENGTH = LengthDomain.SHORT_DESCRIPTION;
+    public static final int DESCRIPTION_LENGTH = LengthDomain.LONG_DESCRIPTION;
+
+    private Long myId;
+    private String myName;
+    private String myDescription;
+
+    @Override
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	public Long getId() {
-		return myId;
-	}
-	
-	public void setId(final Long id) {
-		myId = id;
-	}
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return myId;
+    }
 
-	@Column(name="name", nullable=false, unique=true, length=NAME_LENGTH)
-	public String getName() {
-		return myName;
-	}
+    public void setId(
+            final Long id) {
+        myId = id;
+    }
 
-	public void setName(final String name) {
-		myName = name;
-	}
+    @Column(name = "name", nullable = false, unique = true, length = NAME_LENGTH)
+    public String getName() {
+        return myName;
+    }
 
-	@Column(name="description", length=DESCRIPTION_LENGTH)
-	public String getDescription() {
-		return myDescription;
-	}
-	
-	public void setDescription(final String description) {
-		myDescription = description;
-	}
+    public void setName(
+            final String name) {
+        myName = name;
+    }
+
+    @Column(name = "description", length = DESCRIPTION_LENGTH)
+    public String getDescription() {
+        return myDescription;
+    }
+
+    public void setDescription(
+            final String description) {
+        myDescription = description;
+    }
 }

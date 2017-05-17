@@ -6,6 +6,7 @@ import fi.thakki.depemp.command.AddDepartmentCommand;
 import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.DepartmentListDto;
 import fi.thakki.depemp.model.Department;
+import fi.thakki.depemp.type.DepartmentId;
 
 @Service
 public class DepartmentTransformer {
@@ -13,7 +14,7 @@ public class DepartmentTransformer {
     public DepartmentListDto toListDto(
             Department department) {
         DepartmentListDto result = new DepartmentListDto();
-        result.id = department.getId();
+        result.id = DepartmentId.valueOf(department.getId());
         result.name = department.getName();
         return result;
     }
@@ -21,7 +22,7 @@ public class DepartmentTransformer {
     public DepartmentDetailsDto toDetailsDto(
             Department department) {
         DepartmentDetailsDto result = new DepartmentDetailsDto();
-        result.id = department.getId();
+        result.id = DepartmentId.valueOf(department.getId());
         result.name = department.getName();
         result.description = department.getDescription();
         return result;

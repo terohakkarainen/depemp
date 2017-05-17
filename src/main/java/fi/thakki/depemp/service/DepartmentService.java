@@ -15,6 +15,7 @@ import fi.thakki.depemp.dto.DepartmentDetailsDto;
 import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.transformer.DepartmentTransformer;
+import fi.thakki.depemp.type.DepartmentId;
 
 @Service
 public class DepartmentService {
@@ -58,7 +59,8 @@ public class DepartmentService {
             AddDepartmentCommand command) throws DuplicateDepartmentNameException {
         try {
             DepartmentAddedDto result = new DepartmentAddedDto();
-            result.id = myGenericDao.persist(myTransformer.toDepartment(command));
+            result.id = DepartmentId
+                    .valueOf(myGenericDao.persist(myTransformer.toDepartment(command)));
             return result;
         } catch (JpaSystemException jse) {
             if (jse.contains(ConstraintViolationException.class)) {

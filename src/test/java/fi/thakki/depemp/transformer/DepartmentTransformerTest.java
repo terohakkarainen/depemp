@@ -10,16 +10,16 @@ import fi.thakki.depemp.model.builder.DepartmentBuilder;
 
 public class DepartmentTransformerTest {
 
-	private DepartmentTransformer myTransformerUnderTest = new DepartmentTransformer();
+    private DepartmentTransformer myTransformerUnderTest = new DepartmentTransformer();
 
-	@Test
-	public void toListDtoHappyCase() {
-		Department dep = new DepartmentBuilder().id(Long.valueOf(1)).name("Foobar")
-				.description("A little bit longer description").get();
+    @Test
+    public void toListDtoHappyCase() {
+        Department dep = new DepartmentBuilder().id(Long.valueOf(1)).name("Foobar")
+                .description("A little bit longer description").get();
 
-		DepartmentListDto result = myTransformerUnderTest.toListDto(dep);
+        DepartmentListDto result = myTransformerUnderTest.toListDto(dep);
 
-		assertEquals(dep.getId().longValue(), result.id);
-		assertEquals(dep.getName(), result.name);
-	}
+        assertEquals(dep.getId().longValue(), result.id.longValue());
+        assertEquals(dep.getName(), result.name);
+    }
 }

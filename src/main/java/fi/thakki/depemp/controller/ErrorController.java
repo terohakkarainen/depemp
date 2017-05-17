@@ -53,7 +53,6 @@ public class ErrorController {
     @ResponseBody
     public ErrorResponseDto handleThrowable(
             Throwable t) {
-        return myErrorResponseTransformer
-                .toErrorResponseDto(ERROR_MESSAGE_FORMAT, t.getMessage());
+        return myErrorResponseTransformer.toErrorResponseDto(ERROR_MESSAGE_FORMAT, t.getMessage());
     }
 }

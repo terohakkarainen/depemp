@@ -7,7 +7,7 @@ public final class StringUtil {
     private StringUtil() {
         // Nothing.
     }
-    
+
     public static final String randomString() {
         return randomString(5);
     }

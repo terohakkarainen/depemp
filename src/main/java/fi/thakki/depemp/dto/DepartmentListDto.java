@@ -1,6 +1,8 @@
 package fi.thakki.depemp.dto;
 
+import fi.thakki.depemp.type.DepartmentId;
+
 public class DepartmentListDto {
-	public long id;
-	public String name;
+    public DepartmentId id;
+    public String name;
 }

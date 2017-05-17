@@ -10,12 +10,14 @@ public class TransactionSupportingTestBase {
     @Autowired
     protected GenericDao myGenericDao;
 
-    protected void assertions(Runnable assertions) {
+    protected void assertions(
+            Runnable assertions) {
         executeTransactionally(assertions);
     }
 
-	@Transactional(readOnly = true)
-	private void executeTransactionally(Runnable runnable) {
-		runnable.run();
-	}
+    @Transactional(readOnly = true)
+    private void executeTransactionally(
+            Runnable runnable) {
+        runnable.run();
+    }
 }
