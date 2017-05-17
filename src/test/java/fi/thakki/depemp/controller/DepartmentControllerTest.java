@@ -76,7 +76,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
                 ErrorResponseDto.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(result.getBody().errorMessage)
-                .isEqualTo(DepartmentController.ERROR_NO_DEPARTMENT_FOUND);
+                .isEqualTo(ErrorController.ERROR_NO_DEPARTMENT_FOUND);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
                 addDto, ErrorResponseDto.class);
         assertThat(failingAdd.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(failingAdd.getBody().errorMessage)
-                .isEqualTo(DepartmentController.ERROR_DUPLICATE_DEPARTMENT_NAME);
+                .isEqualTo(ErrorController.ERROR_DUPLICATE_DEPARTMENT_NAME);
     }
 
     @Test
