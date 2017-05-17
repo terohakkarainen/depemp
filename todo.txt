@@ -2,4 +2,3 @@
 - Show validation error details in front.
 - Show AJAX query errors in front.
 - Replace greeting with something else in Angular -> get rid of Greeting classes.
-- Update README.md with requirements.
