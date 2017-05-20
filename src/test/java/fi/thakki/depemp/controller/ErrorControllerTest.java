@@ -8,23 +8,33 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import fi.thakki.depemp.Application;
 import fi.thakki.depemp.dao.GenericDao;
 import fi.thakki.depemp.dto.ErrorResponseDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.util.StringUtil;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("errorControllerTest")
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ErrorControllerTest {
 
+    @TestConfiguration
+    public static class MyConfiguration {
+
+        @Bean
+        @Primary
+        public GenericDao genericDao() {
+            return Mockito.mock(GenericDao.class);
+        }
+    }
+    
     @Autowired
     private GenericDao myMockedGenericDao;
 

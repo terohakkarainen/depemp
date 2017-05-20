@@ -21,7 +21,7 @@ public class DepartmentBuilder {
 		return this;
 	}
 
-    public Department get() {
+    public Department build() {
 		return myDepartment;
 	}
 }

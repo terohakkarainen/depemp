@@ -15,7 +15,7 @@ public class DepartmentTransformerTest {
     @Test
     public void toListDtoHappyCase() {
         Department dep = new DepartmentBuilder().id(Long.valueOf(1)).name("Foobar")
-                .description("A little bit longer description").get();
+                .description("A little bit longer description").build();
 
         DepartmentListDto result = myTransformerUnderTest.toListDto(dep);
 

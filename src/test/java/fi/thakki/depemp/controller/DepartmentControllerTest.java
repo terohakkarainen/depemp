@@ -41,7 +41,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void getAllDepartments() throws Exception {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
-        Department department = new DepartmentBuilder().name(name).get();
+        Department department = new DepartmentBuilder().name(name).build();
         myEntityFactory.persist(department);
 
         ResponseEntity<ListDepartmentsDto> result = myRestTemplate.getForEntity("/departments",
@@ -57,7 +57,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     public void getExistingDepartment() throws Exception {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
         String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
-        Department department = new DepartmentBuilder().name(name).description(desc).get();
+        Department department = new DepartmentBuilder().name(name).description(desc).build();
         myEntityFactory.persist(department);
 
         ResponseEntity<DepartmentDetailsDto> result = myRestTemplate
