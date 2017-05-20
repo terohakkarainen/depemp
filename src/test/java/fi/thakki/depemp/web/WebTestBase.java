@@ -30,6 +30,7 @@ public abstract class WebTestBase {
     public void onSetUp() {
         System.setProperty("webdriver.chrome.driver", myChromeDriverLocation);
         myWebDriver = new ChromeDriver();
+        onSetUpComplete();
     }
     
     @After
@@ -44,4 +45,6 @@ public abstract class WebTestBase {
     protected String baseUrl() {
         return myBaseUrl;
     }
+    
+    protected abstract void onSetUpComplete();
 }

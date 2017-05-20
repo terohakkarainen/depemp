@@ -6,6 +6,11 @@ import org.junit.Test;
 
 public class FrontPageTest extends WebTestBase {
 
+    @Override
+    protected void onSetUpComplete() {
+        // Nothing.
+    }
+
     @Test
     public void testFrontPage() {
         webDriver().get(baseUrl());

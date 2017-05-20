@@ -12,7 +12,6 @@ $(document).ready(function() {
         contentType: "application/json",
         data: JSON.stringify(formToJsonString($("#addDepartmentForm"))),
         success: function(data) {
-          alert("New department id: " + data.id);
           document.getElementById("addDepartmentForm").reset();
           refreshDepartments();
         },
