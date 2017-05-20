@@ -79,6 +79,14 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     }
 
     @Test
+    public void getNonNumericDepartment() throws Exception {
+        ResponseEntity<ErrorResponseDto> result = myRestTemplate.getForEntity("/departments/foo",
+                ErrorResponseDto.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(result.getBody().details.get(0)).contains("java.lang.NumberFormatException");
+    }
+
+    @Test
     public void addNewDepartment() throws Exception {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
         String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
