@@ -37,7 +37,7 @@ public class GenericDao {
         return Optional.ofNullable(myEntityManager.find(clazz, id));
     }
 
-    public <T extends Identifiable> Long persist(
+    public <T extends Identifiable> long persist(
             T entity) {
         myEntityManager.persist(entity);
         return entity.getId();
