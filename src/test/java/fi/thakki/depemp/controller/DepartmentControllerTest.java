@@ -23,7 +23,6 @@ import fi.thakki.depemp.dto.ErrorResponseDto;
 import fi.thakki.depemp.dto.ListDepartmentsDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.model.EntityFactory;
-import fi.thakki.depemp.model.builder.DepartmentBuilder;
 import fi.thakki.depemp.transformer.ErrorResponseTransformer;
 import fi.thakki.depemp.util.StringUtil;
 
@@ -41,7 +40,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void getAllDepartments() throws Exception {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
-        Department department = new DepartmentBuilder().name(name).build();
+        Department department = myEntityFactory.newDepartment(name);
         myEntityFactory.persist(department);
 
         ResponseEntity<ListDepartmentsDto> result = myRestTemplate.getForEntity("/departments",
@@ -57,7 +56,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     public void getExistingDepartment() throws Exception {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
         String desc = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
-        Department department = new DepartmentBuilder().name(name).description(desc).build();
+        Department department = myEntityFactory.newDepartment(name, desc);
         myEntityFactory.persist(department);
 
         ResponseEntity<DepartmentDetailsDto> result = myRestTemplate

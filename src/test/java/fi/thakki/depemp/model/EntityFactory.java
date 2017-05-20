@@ -11,11 +11,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class EntityFactory {
 
     @Autowired
-    private EntityManager myEm;
+    private EntityManager myEntityManager;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void persist(
             Object obj) {
-        myEm.persist(obj);
+        myEntityManager.persist(obj);
+    }
+
+    public Department newDepartment(
+            String name) {
+        Department result = new Department();
+        result.setName(name);
+        return result;
+    }
+
+    public Department newDepartment(
+            String name,
+            String description) {
+        Department result = newDepartment(name);
+        result.setDescription(description);
+        return result;
     }
 }
