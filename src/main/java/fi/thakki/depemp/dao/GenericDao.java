@@ -32,7 +32,7 @@ public class GenericDao {
     }
 
     public <T> Optional<T> find(
-            final Long id,
+            final long id,
             final Class<T> clazz) {
         return Optional.ofNullable(myEntityManager.find(clazz, id));
     }
