@@ -20,9 +20,9 @@ import fi.thakki.depemp.dto.ErrorResponseDto;
 import fi.thakki.depemp.model.Department;
 import fi.thakki.depemp.util.StringUtil;
 
-@ActiveProfiles("errorControllerTest")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("errorControllerTest")
 public class ErrorControllerTest {
 
     @Autowired

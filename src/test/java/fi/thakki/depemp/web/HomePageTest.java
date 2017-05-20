@@ -24,22 +24,22 @@ public class HomePageTest {
     @Value("${webdriver.chrome.driver}")
     private String myChromeDriverLocation;
     
-    private WebDriver myDriver;
+    private WebDriver myWebDriver;
     
     @Before
     public void onSetUp() {
         System.setProperty("webdriver.chrome.driver", myChromeDriverLocation);
-        myDriver = new ChromeDriver();
+        myWebDriver = new ChromeDriver();
     }
     
     @After
     public void onTearDown() {
-        myDriver.quit();
+        myWebDriver.quit();
     }
     
     @Test
     public void testFoo() {
-        myDriver.get("http://localhost:8080");
-        assertThat(myDriver.getTitle()).isEqualTo("Depemp exercise project");
+        myWebDriver.get("http://localhost:8080");
+        assertThat(myWebDriver.getTitle()).isEqualTo("Depemp exercise project");
     }
 }
