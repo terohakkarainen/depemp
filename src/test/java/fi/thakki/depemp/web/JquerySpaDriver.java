@@ -52,14 +52,11 @@ public class JquerySpaDriver {
                 ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className(departmentClass)));
 
         List<WebElement> departments = myWebDriver.findElements(By.className(departmentClass));
-        for (WebElement department : departments) {
-            String departmentName = department.findElement(By.tagName("td")).getText();
-            if (name.equals(departmentName)) {
-                return;
-            }
+        if (departments.stream().map(w -> w.findElement(By.tagName("td")).getText())
+                .noneMatch(s -> name.equals(s))) {
+            throw new DepartmentDoesNotExistException(
+                    "Did not find a department with name \"" + name + "\"");
         }
-        throw new DepartmentDoesNotExistException(
-                "Did not find a department with name \"" + name + "\"");
     }
 
     private void waitSilently() {
