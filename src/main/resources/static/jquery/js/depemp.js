@@ -12,12 +12,13 @@ $(document).ready(function() {
         contentType: "application/json",
         data: JSON.stringify(formToJsonString($("#addDepartmentForm"))),
         success: function(data) {
-          document.getElementById("addDepartmentForm").reset();
+          resetFeedbackMessages();
+          resetAddDepartmentForm();
           refreshDepartments();
         },
         error: function(xhr, status, error) {
-          var json = $.parseJSON(xhr.responseText);
-          alert(json.errorMessage);
+          resetFeedbackMessages();
+          showErrorMessages($.parseJSON(xhr.responseText));
         }
     });
     e.preventDefault();
@@ -30,11 +31,10 @@ function refreshDepartments() {
   $.getJSON(
 	  "/departments",
 	  function(data) {
-        let tr;
         let table = $("#departmentsTable");
         table.find("tbody tr").remove();
         for(let i = 0; i < data.departments.length; i++) {
-          tr = $('<tr class="department" />');
+          let tr = $('<tr class="department" />');
           tr.append("<td>" + data.departments[i].name + "</td>");
           table.find("tbody").append(tr);
         }
@@ -43,9 +43,29 @@ function refreshDepartments() {
 }
 
 function formToJsonString(form) {
-  var jsonData = {};
+  let jsonData = {};
   form.serializeArray().map(function(x) { 
     jsonData[x.name] = x.value;
   });
   return jsonData;
+}
+
+function resetFeedbackMessages() {
+  $("#feedbackMessages").find("p").remove();
+}
+
+function resetAddDepartmentForm() {
+  document.getElementById("addDepartmentForm").reset();
+}
+
+function showErrorMessages(errorJson) {
+  let title = $("<p>" + errorJson.errorMessage + "</p>");
+  if(errorJson.details.length > 0) {
+    let details = $('<ul></ul>');
+    for(let i = 0; i < errorJson.details.length; i++) {
+      details.append("<li>" + errorJson.details[i] + "</li>");
+    }
+    title.append(details);
+  }
+  $("#feedbackMessages").append(title);
 }

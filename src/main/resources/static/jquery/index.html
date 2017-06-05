@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <title>Depemp exercise application</title>
   <link href="css/depemp.css" rel="stylesheet">
-  <script src="js/jquery-3.2.0.js"></script>
-  <script src="js/depemp.js"></script>
 </head>
 <body>
 
@@ -14,25 +12,31 @@
   </div>
   
   <div id="contents">
-    Departments | <a id="refreshDepartmentsLink" href="#">refresh</a><br/>
-    <table id="departmentsTable">
-      <thead>
-        <tr>
-          <td>Name</td>
-        </tr>
-      </thead>
-      <tbody/>
-    </table><br/>
-    <form id="addDepartmentForm" action="/departments" method="post">
-      Name:<input id="newDepartmentName" type="text" name="name"><br/>
-      Description:<input id="newDepartmentDescription" type="text" name="description"></br/>
-      <input id="newDepartmentSubmit" type="submit" value="Add">
-    </form>
+    <div id="feedbackMessages"></div>
+    <div id="departments">
+      Departments | <a id="refreshDepartmentsLink" href="#">refresh</a><br/>
+      <table id="departmentsTable">
+        <thead>
+          <tr>
+            <td>Name</td>
+          </tr>
+        </thead>
+        <tbody/>
+      </table><br/>
+      <form id="addDepartmentForm" action="/departments" method="post">
+        Name:<input id="newDepartmentName" type="text" name="name"><br/>
+        Description:<input id="newDepartmentDescription" type="text" name="description"></br/>
+        <input id="newDepartmentSubmit" type="submit" value="Add">
+      </form>
+    </div>
   </div>
   
   <div id="footer">
     <!-- TODO -->
   </div>
+  
+  <script src="js/jquery-3.2.0.js"></script>
+  <script src="js/depemp.js"></script>
   
 </body>
 </html>

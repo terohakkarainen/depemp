@@ -9,6 +9,6 @@ public class ErrorResponseDto {
 
     public String errorMessage;
     
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public List<String> details = new ArrayList<>();
 }
