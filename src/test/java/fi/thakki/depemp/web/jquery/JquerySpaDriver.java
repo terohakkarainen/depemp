@@ -22,12 +22,13 @@ public class JquerySpaDriver implements PageDriver {
     }
 
     public static class UnexpectedContentException extends RuntimeException {
-        
-        public UnexpectedContentException(String message) {
+
+        public UnexpectedContentException(
+                String message) {
             super(message);
         }
     }
-    
+
     private WebDriver myWebDriver;
     private String myBaseUrl;
 
@@ -41,7 +42,7 @@ public class JquerySpaDriver implements PageDriver {
     @Override
     public void navigateTo() {
         myWebDriver.get(myBaseUrl + "/jquery/index.html");
-        if(!findById("departmentsTable").isDisplayed()) {
+        if (!findById("departmentsTable").isDisplayed()) {
             throw new UnexpectedContentException("Element #departmentsTable not visible");
         }
     }
@@ -89,16 +90,17 @@ public class JquerySpaDriver implements PageDriver {
             String value) {
         WebElement field = findById(fieldId);
         Actions actions = new Actions(myWebDriver);
-        actions.moveToElement(field).click().perform();
+        actions.moveToElement(field).click(field).perform();
         actions.moveToElement(field).sendKeys(value).perform();
     }
 
-    private void clickLink(String linkId) {
+    private void clickLink(
+            String linkId) {
         WebElement link = findById(linkId);
         Actions actions = new Actions(myWebDriver);
-        actions.moveToElement(link).click().perform();
+        actions.moveToElement(link).click(link).perform();
     }
-    
+
     private WebElement findById(
             String id) {
         return myWebDriver.findElement(By.id(id));
