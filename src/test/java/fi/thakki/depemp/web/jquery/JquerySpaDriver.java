@@ -1,6 +1,7 @@
 package fi.thakki.depemp.web.jquery;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +13,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import fi.thakki.depemp.web.PageDriver;
 
 public class JquerySpaDriver implements PageDriver {
+
+    private static final String CLASS_DEPARTMENT = "department";
+    private static final String CLASS_ERROR_MESSAGE = "errorMessage";
+    private static final String CLASS_ERROR_DETAIL = "errorDetail";
 
     public static class DepartmentDoesNotExistException extends RuntimeException {
 
@@ -63,25 +68,15 @@ public class JquerySpaDriver implements PageDriver {
 
     public void assertDepartmentExists(
             String name) {
-        final String departmentClass = "department";
-
         waitSilently();
-        new WebDriverWait(myWebDriver, 5).until(
-                ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className(departmentClass)));
+        new WebDriverWait(myWebDriver, 5).until(ExpectedConditions
+                .visibilityOfAllElementsLocatedBy(By.className(CLASS_DEPARTMENT)));
 
-        List<WebElement> departments = myWebDriver.findElements(By.className(departmentClass));
+        List<WebElement> departments = myWebDriver.findElements(By.className(CLASS_DEPARTMENT));
         if (departments.stream().map(w -> w.findElement(By.tagName("td")).getText())
                 .noneMatch(s -> name.equals(s))) {
             throw new DepartmentDoesNotExistException(
                     "Did not find a department with name \"" + name + "\"");
-        }
-    }
-
-    private void waitSilently() {
-        try {
-            Thread.sleep(WebDriverWait.DEFAULT_SLEEP_TIMEOUT);
-        } catch (Exception e) {
-            // Just catch.
         }
     }
 
@@ -104,5 +99,28 @@ public class JquerySpaDriver implements PageDriver {
     private WebElement findById(
             String id) {
         return myWebDriver.findElement(By.id(id));
+    }
+
+    public void waitUntilErrorMessageIsDisplayed() {
+        waitSilently();
+        new WebDriverWait(myWebDriver, 5).until(ExpectedConditions
+                .visibilityOfAllElementsLocatedBy(By.className(CLASS_ERROR_MESSAGE)));
+    }
+
+    public String getErrorMessage() {
+        return myWebDriver.findElement(By.className(CLASS_ERROR_MESSAGE)).getText();
+    }
+
+    public List<String> getErrorDetails() {
+        List<WebElement> elements = myWebDriver.findElements(By.className(CLASS_ERROR_DETAIL));
+        return elements.stream().map(e -> e.getText()).collect(Collectors.toList());
+    }
+
+    private void waitSilently() {
+        try {
+            Thread.sleep(WebDriverWait.DEFAULT_SLEEP_TIMEOUT);
+        } catch (Exception e) {
+            // Just catch.
+        }
     }
 }

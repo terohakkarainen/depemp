@@ -1,5 +1,7 @@
 package fi.thakki.depemp.web.jquery;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 
 import fi.thakki.depemp.util.StringUtil;
@@ -18,12 +20,22 @@ public class JquerySpaTest extends WebTestBase {
     public void departmentCanBeAdded() {
         String newDepartmentName = StringUtil.randomString();
         String newDepartmentDescription = StringUtil.randomString();
-        
+
         pageDriver.navigateTo();
         pageDriver.typeNewDepartmentName(newDepartmentName);
         pageDriver.typeNewDepartmentDescription(newDepartmentDescription);
         pageDriver.submitNewDepartment();
-        
+
         pageDriver.assertDepartmentExists(newDepartmentName);
+    }
+
+    @Test
+    public void errorMessagesAreShown() {
+        pageDriver.navigateTo();
+        pageDriver.submitNewDepartment();
+
+        pageDriver.waitUntilErrorMessageIsDisplayed();
+        assertThat(pageDriver.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
+        assertThat(pageDriver.getErrorDetails()).contains("name: size must be between 1 and 32");
     }
 }

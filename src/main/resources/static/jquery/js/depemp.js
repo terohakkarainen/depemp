@@ -59,13 +59,13 @@ function resetAddDepartmentForm() {
 }
 
 function showErrorMessages(errorJson) {
-  let title = $("<p>" + errorJson.errorMessage + "</p>");
+  let title = $('<p class="errorMessage">' + errorJson.errorMessage + '</p>');
+  $("#feedbackMessages").append(title);
   if(errorJson.details.length > 0) {
     let details = $('<ul></ul>');
     for(let i = 0; i < errorJson.details.length; i++) {
-      details.append("<li>" + errorJson.details[i] + "</li>");
+      details.append('<li class="errorDetail">' + errorJson.details[i] + '</li>');
     }
-    title.append(details);
+    $("#feedbackMessages").append($('<p>').append(details));
   }
-  $("#feedbackMessages").append(title);
 }
