@@ -48,7 +48,7 @@ public class DepartmentService {
 
     @Transactional(readOnly = true)
     public DepartmentDetailsDto getDepartment(
-            Long id) throws DepartmentNotFoundException {
+            long id) throws DepartmentNotFoundException {
         Optional<Department> optDepartment = myGenericDao.find(id, Department.class);
         return myTransformer
                 .toDetailsDto(optDepartment.orElseThrow(DepartmentNotFoundException::new));

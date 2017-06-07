@@ -36,7 +36,7 @@ public class DepartmentController {
 
     @GetMapping("/departments/{id}")
     public ResponseEntity<DepartmentDetailsDto> getDepartment(
-            @PathVariable Long id) throws DepartmentNotFoundException {
+            @PathVariable long id) throws DepartmentNotFoundException {
         return ResponseEntity.ok(myDepartmentService.getDepartment(id));
     }
 
