@@ -26,7 +26,8 @@ public class JquerySpaTest extends WebTestBase {
         pageDriver.typeNewDepartmentDescription(newDepartmentDescription);
         pageDriver.submitNewDepartment();
 
-        pageDriver.assertDepartmentExists(newDepartmentName);
+        pageDriver.waitUntilDepartmentListIsRefreshed();
+        assertThat(pageDriver.getDepartmentNames()).contains(newDepartmentName);
     }
 
     @Test

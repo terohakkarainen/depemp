@@ -66,20 +66,6 @@ public class JquerySpaDriver implements PageDriver {
         clickLink("newDepartmentSubmit");
     }
 
-    public void assertDepartmentExists(
-            String name) {
-        waitSilently();
-        new WebDriverWait(myWebDriver, 5).until(ExpectedConditions
-                .visibilityOfAllElementsLocatedBy(By.className(CLASS_DEPARTMENT)));
-
-        List<WebElement> departments = myWebDriver.findElements(By.className(CLASS_DEPARTMENT));
-        if (departments.stream().map(w -> w.findElement(By.tagName("td")).getText())
-                .noneMatch(s -> name.equals(s))) {
-            throw new DepartmentDoesNotExistException(
-                    "Did not find a department with name \"" + name + "\"");
-        }
-    }
-
     private void typeToField(
             String fieldId,
             String value) {
@@ -122,5 +108,17 @@ public class JquerySpaDriver implements PageDriver {
         } catch (Exception e) {
             // Just catch.
         }
+    }
+
+    public void waitUntilDepartmentListIsRefreshed() {
+        waitSilently();
+        new WebDriverWait(myWebDriver, 5).until(ExpectedConditions
+                .visibilityOfAllElementsLocatedBy(By.className(CLASS_DEPARTMENT)));
+    }
+
+    public List<String> getDepartmentNames() {
+        List<WebElement> departments = myWebDriver.findElements(By.className(CLASS_DEPARTMENT));
+        return departments.stream().map(e -> e.findElement(By.tagName("td")).getText())
+                .collect(Collectors.toList());
     }
 }
