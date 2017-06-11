@@ -1,7 +1,9 @@
+const BACKEND_ERROR = "Unable to get response from backend server!";
+
 $(document).ready(function() {
 
   $("#refreshDepartmentsLink").click(function(event) {
-    refreshDepartments();
+    _refreshDepartments();
     event.preventDefault();
   });
 
@@ -10,24 +12,33 @@ $(document).ready(function() {
         type: "POST",
         url: "/departments",
         contentType: "application/json",
-        data: JSON.stringify(formToJsonString($("#addDepartmentForm"))),
+        data: JSON.stringify(_formToJsonString($("#addDepartmentForm"))),
         success: function(data) {
-          resetFeedbackMessages();
-          resetAddDepartmentForm();
-          refreshDepartments();
+          _resetFeedbackMessages();
+          _resetAddDepartmentForm();
+          _refreshDepartments();
         },
         error: function(xhr, status, error) {
-          resetFeedbackMessages();
-          showErrorMessages($.parseJSON(xhr.responseText));
+          _resetFeedbackMessages();
+          if(_isUndefined(xhr.responseText)) {
+          	_showErrorMessage(BACKEND_ERROR);
+          }
+          else {
+            _showErrorMessages($.parseJSON(xhr.responseText));
+          }
         }
     });
     e.preventDefault();
   });
 
-  refreshDepartments();
+  _refreshDepartments();
 });
 
-function refreshDepartments() {
+function _isUndefined(v) {
+  return typeof v == "undefined";
+}
+
+function _refreshDepartments() {
   $.getJSON(
 	  "/departments",
 	  function(data) {
@@ -39,10 +50,14 @@ function refreshDepartments() {
           table.find("tbody").append(tr);
         }
       }
-  );
+  )
+  .fail(function(xhr, textStatus, errorThrown) {
+    _resetFeedbackMessages();
+    _showErrorMessage(BACKEND_ERROR);
+  });
 }
 
-function formToJsonString(form) {
+function _formToJsonString(form) {
   let jsonData = {};
   form.serializeArray().map(function(x) { 
     jsonData[x.name] = x.value;
@@ -50,15 +65,15 @@ function formToJsonString(form) {
   return jsonData;
 }
 
-function resetFeedbackMessages() {
+function _resetFeedbackMessages() {
   $("#feedbackMessages").find("p").remove();
 }
 
-function resetAddDepartmentForm() {
+function _resetAddDepartmentForm() {
   document.getElementById("addDepartmentForm").reset();
 }
 
-function showErrorMessages(errorJson) {
+function _showErrorMessages(errorJson) {
   let title = $('<p class="errorMessage">' + errorJson.errorMessage + '</p>');
   $("#feedbackMessages").append(title);
   if(errorJson.details.length > 0) {
@@ -68,4 +83,9 @@ function showErrorMessages(errorJson) {
     }
     $("#feedbackMessages").append($('<p>').append(details));
   }
+}
+
+function _showErrorMessage(message) {
+  let title = $('<p class="errorMessage">' + message + '</p>');
+  $("#feedbackMessages").append(title);
 }
