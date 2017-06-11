@@ -1,2 +1,2 @@
-- Show AJAX query errors in front.
+- Some rudimentary CSS styling
 - Replace greeting with something else in Angular -> get rid of Greeting classes.
