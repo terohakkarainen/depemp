@@ -13,7 +13,7 @@ public class EntityFactory {
     @Autowired
     private EntityManager myEntityManager;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void persist(
             Object obj) {
         myEntityManager.persist(obj);
