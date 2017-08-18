@@ -26,3 +26,10 @@ body {
   padding: 10px 10px 10px 10px;
   min-height: 200px;
 }
+
+#feedbackMessages {
+  background-color: crimson;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  padding: 10px;
+}

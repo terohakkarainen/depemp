@@ -36,6 +36,8 @@ $(document).ready(function() {
   });
 
   _refreshDepartments();
+
+  $("#feedbackMessages").hide();
 });
 
 function _isUndefined(v) {
@@ -75,6 +77,7 @@ function _formToJsonString(form) {
 
 function _resetFeedbackMessages() {
   $("#feedbackMessages").find("p").remove();
+  $("#feedbackMessages").hide();
 }
 
 function _resetAddDepartmentForm() {
@@ -91,9 +94,11 @@ function _showErrorMessages(errorJson) {
     }
     $("#feedbackMessages").append($('<p>').append(details));
   }
+  $("#feedbackMessages").show();
 }
 
 function _showErrorMessage(message) {
   let title = $('<p class="errorMessage">' + message + '</p>');
   $("#feedbackMessages").append(title);
+  $("#feedbackMessages").show();
 }
