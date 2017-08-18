@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Depemp exercise application</title>
-  <link href="css/depemp.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/depemp.css" />
+  <link rel="stylesheet" href="css/jquery-ui-1.12.1.min.css" />
 </head>
 <body>
 
@@ -14,20 +15,18 @@
   <div id="contents">
     <div id="feedbackMessages"></div>
     <div id="departments">
-      Departments | <a id="refreshDepartmentsLink" href="#">refresh</a><br/>
-      <table id="departmentsTable">
-        <thead>
-          <tr>
-            <td>Name</td>
-          </tr>
-        </thead>
-        <tbody/>
-      </table><br/>
-      <form id="addDepartmentForm" action="/departments" method="post">
-        Name:<input id="newDepartmentName" type="text" name="name"><br/>
-        Description:<input id="newDepartmentDescription" type="text" name="description"></br/>
-        <input id="newDepartmentSubmit" type="submit" value="Add">
-      </form>
+      <h3>Departments | <span><a id="refreshDepartmentsLink" href="#">refresh</a></span></h3>
+      <div id="departmentsAccordion">
+        <!-- Filled automatically -->
+      </div>
+      <div id="addDepartment">
+        <h3>Add new department</h3>
+        <form id="addDepartmentForm" action="/departments" method="post">
+          Name:<input id="newDepartmentName" type="text" name="name"><br/>
+          Description:<input id="newDepartmentDescription" type="text" name="description"></br/>
+          <input id="newDepartmentSubmit" type="submit" value="Add">
+        </form>
+      </div>
     </div>
   </div>
 
@@ -36,6 +35,7 @@
   </div>
 
   <script src="js/jquery-3.2.0.js"></script>
+  <script src="js/jquery-ui-1.12.1.min.js"></script>
   <script src="js/depemp.js"></script>
 
 </body>

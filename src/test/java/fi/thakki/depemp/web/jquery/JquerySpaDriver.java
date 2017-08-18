@@ -17,6 +17,7 @@ public class JquerySpaDriver implements PageDriver {
     private static final String CLASS_DEPARTMENT = "department";
     private static final String CLASS_ERROR_MESSAGE = "errorMessage";
     private static final String CLASS_ERROR_DETAIL = "errorDetail";
+    private static final String ID_DEPARTMENT_ACCORDION = "departmentsAccordion";
 
     public static class DepartmentDoesNotExistException extends RuntimeException {
 
@@ -47,8 +48,8 @@ public class JquerySpaDriver implements PageDriver {
     @Override
     public void navigateTo() {
         myWebDriver.get(myBaseUrl + "/jquery/index.html");
-        if (!findById("departmentsTable").isDisplayed()) {
-            throw new UnexpectedContentException("Element #departmentsTable not visible");
+        if (!findById(ID_DEPARTMENT_ACCORDION).isDisplayed()) {
+            throw new UnexpectedContentException(String.format("Element #%s not visible", ID_DEPARTMENT_ACCORDION));
         }
     }
 
@@ -118,7 +119,7 @@ public class JquerySpaDriver implements PageDriver {
 
     public List<String> getDepartmentNames() {
         List<WebElement> departments = myWebDriver.findElements(By.className(CLASS_DEPARTMENT));
-        return departments.stream().map(e -> e.findElement(By.tagName("td")).getText())
+        return departments.stream().map(e -> e.findElement(By.tagName("h3")).getText())
                 .collect(Collectors.toList());
     }
 }

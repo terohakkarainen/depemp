@@ -31,6 +31,10 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
+  $("#departmentsAccordion").accordion({
+    header: "> div > h3"
+  });
+
   _refreshDepartments();
 });
 
@@ -42,18 +46,22 @@ function _refreshDepartments() {
   $.getJSON(
       "/departments",
     function(data) {
-        let table = $("#departmentsTable");
-        table.find("tbody tr").remove();
+        let accordion = $("#departmentsAccordion");
+        accordion.find("div").remove();
         for(let i = 0; i < data.departments.length; i++) {
-          let tr = $('<tr class="department" />');
-          tr.append("<td>" + data.departments[i].name + "</td>");
-          table.find("tbody").append(tr);
+          let department = $('<div class="department" />');
+          department.append("<h3>" + data.departments[i].name + "</h3>");
+          department.append("<div><p>" + "some text" + "</p></div>");
+          accordion.append(department);
         }
       }
   )
   .fail(function(xhr, textStatus, errorThrown) {
     _resetFeedbackMessages();
     _showErrorMessage(BACKEND_ERROR);
+  })
+  .done(function() {
+    $("#departmentsAccordion").accordion("refresh");
   });
 }
 
