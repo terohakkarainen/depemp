@@ -25,14 +25,14 @@ public abstract class WebTestBase {
     private String myBaseUrl;
 
     private WebDriver myWebDriver;
-    
+
     @Before
     public void onSetUp() {
         System.setProperty("webdriver.chrome.driver", myChromeDriverLocation);
         myWebDriver = new ChromeDriver();
         onSetUpComplete();
     }
-    
+
     @After
     public void onTearDown() {
         myWebDriver.quit();
@@ -41,10 +41,10 @@ public abstract class WebTestBase {
     protected WebDriver webDriver() {
         return myWebDriver;
     }
-    
+
     protected String baseUrl() {
         return myBaseUrl;
     }
-    
+
     protected abstract void onSetUpComplete();
 }

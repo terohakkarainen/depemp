@@ -13,7 +13,7 @@ public class DepartmentServiceTest {
 
     @Autowired
     private DepartmentService myServiceUnderTest;
-    
+
     @Test(expected = NullPointerException.class)
     public void addDepartmentHandlesNullArgument() throws Exception {
         myServiceUnderTest.addDepartment(null);

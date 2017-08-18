@@ -8,7 +8,11 @@ import fi.thakki.depemp.dao.GenericDao;
 public class TransactionSupportingTestBase {
 
     @Autowired
-    protected GenericDao myGenericDao;
+    private GenericDao myGenericDao;
+
+    protected GenericDao genericDao() {
+        return myGenericDao;
+    }
 
     protected void assertions(
             Runnable assertions) {

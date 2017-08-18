@@ -8,11 +8,11 @@ public final class StringUtil {
         // Nothing.
     }
 
-    public static final String randomString() {
+    public static String randomString() {
         return randomString(5);
     }
 
-    public static final String randomString(
+    public static String randomString(
             int length) {
         return RandomStringUtils.randomAlphanumeric(length);
     }

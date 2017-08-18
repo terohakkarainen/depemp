@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ErrorResponseDto {
 
     public String errorMessage;
-    
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public List<String> details = new ArrayList<>();
 }

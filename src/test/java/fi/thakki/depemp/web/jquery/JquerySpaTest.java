@@ -38,5 +38,5 @@ public class JquerySpaTest extends WebTestBase {
         pageDriver.waitUntilErrorMessageIsDisplayed();
         assertThat(pageDriver.getErrorMessage()).isEqualTo("Validation failed: 1 error(s)");
         assertThat(pageDriver.getErrorDetails()).contains("name: size must be between 1 and 32");
-    }    
+    }
 }

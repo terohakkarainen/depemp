@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+    <!-- Suppress all checks on generated classes, txt, pdf, docx and jks files. -->
+    <suppress checks="." files="[a-zA-Z0-9]*_\.java" />
+    <suppress checks="." files="fi[\\/]solita[\\/]edvard[\\/]jaxb[\\/]pain_001_001_02[\\/]"/>
+    <suppress checks="." files="[a-zA-Z0-9]*\.txt" />
+    <suppress checks="." files="[a-zA-Z0-9]*\.docx" />
+    <suppress checks="." files="[a-zA-Z0-9]*\.pdf" />
+    <suppress checks="." files="[a-zA-Z0-9]*\.jks" />
+
+    <!-- No extension checks for test classes. -->
+    <suppress checks="DesignForExtension" files="[a-zA-Z0-9]*Test\.java" />
+    <suppress checks="MagicNumber" files="[\\/]test[\\/]" />
+    <suppress checks="FileLength" files="[a-zA-Z0-9]*Test\.java" />
+    <suppress checks="DesignForExtension" files="EntityFactory\.java" />
+    <suppress checks="MagicNumber" files="EntityFactory\.java" />
+    <suppress checks="FileLength" files="EntityFactory\.java" />
+    
+
+</suppressions>

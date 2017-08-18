@@ -21,7 +21,7 @@ $(document).ready(function() {
         error: function(xhr, status, error) {
           _resetFeedbackMessages();
           if(_isUndefined(xhr.responseText)) {
-          	_showErrorMessage(BACKEND_ERROR);
+            _showErrorMessage(BACKEND_ERROR);
           }
           else {
             _showErrorMessages($.parseJSON(xhr.responseText));
@@ -40,8 +40,8 @@ function _isUndefined(v) {
 
 function _refreshDepartments() {
   $.getJSON(
-	  "/departments",
-	  function(data) {
+      "/departments",
+    function(data) {
         let table = $("#departmentsTable");
         table.find("tbody tr").remove();
         for(let i = 0; i < data.departments.length; i++) {
@@ -59,7 +59,7 @@ function _refreshDepartments() {
 
 function _formToJsonString(form) {
   let jsonData = {};
-  form.serializeArray().map(function(x) { 
+  form.serializeArray().map(function(x) {
     jsonData[x.name] = x.value;
   });
   return jsonData;

@@ -104,7 +104,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         assertions(new Runnable() {
             @Override
             public void run() {
-                Optional<Department> optDepartment = myGenericDao.find(newDepartmentId,
+                Optional<Department> optDepartment = genericDao().find(newDepartmentId,
                         Department.class);
                 assertThat(optDepartment.isPresent()).isTrue();
                 assertThat(optDepartment.get().getName()).isEqualTo(name);

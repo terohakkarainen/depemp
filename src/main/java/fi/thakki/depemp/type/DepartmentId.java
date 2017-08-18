@@ -1,9 +1,9 @@
 package fi.thakki.depemp.type;
 
-public class DepartmentId {
-    
+public final class DepartmentId {
+
     private final long myValue;
-    
+
     private DepartmentId(long value) {
        myValue = value;
     }

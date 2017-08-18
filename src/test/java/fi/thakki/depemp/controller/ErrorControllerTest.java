@@ -34,7 +34,7 @@ public class ErrorControllerTest {
             return Mockito.mock(GenericDao.class);
         }
     }
-    
+
     @Autowired
     private GenericDao myMockedGenericDao;
 
