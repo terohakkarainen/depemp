@@ -18,6 +18,10 @@ body {
   transform: translateY(-50%);
 }
 
+#departments > h3 {
+  margin-top: 0px;
+}
+
 #footer {
   height: 50px;
   background-color: skyblue;
