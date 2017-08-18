@@ -1,11 +1,27 @@
+body {
+  background-color: lightcyan;
+  font-family: Verdana, Times, Serif;
+  min-width: 800px;
+  width: auto !important;
+}
+
 #header {
   height: 50px;
-  background-color: gray;
+  background-color: skyblue;
+  border-radius: 8px;
+}
+
+#header h1 {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  transform: translateY(-50%);
 }
 
 #footer {
   height: 50px;
-  background-color: gray;
+  background-color: skyblue;
+  border-radius: 8px;
 }
 
 #contents {
