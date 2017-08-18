@@ -40,7 +40,8 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
     @Test
     public void getAllDepartments() throws Exception {
         String name = StringUtil.randomString(Department.NAME_LENGTH);
-        Department department = myEntityFactory.newDepartment(name);
+        String description = StringUtil.randomString(Department.DESCRIPTION_LENGTH);
+        Department department = myEntityFactory.newDepartment(name, description);
         myEntityFactory.persist(department);
 
         ResponseEntity<ListDepartmentsDto> result = myRestTemplate.getForEntity("/departments",
@@ -50,6 +51,7 @@ public class DepartmentControllerTest extends TransactionSupportingTestBase {
         ListDepartmentsDto departmentList = result.getBody();
         assertThat(departmentList.departments.size()).isEqualTo(1);
         assertThat(departmentList.departments.get(0).name).isEqualTo(name);
+        assertThat(departmentList.departments.get(0).description).isEqualTo(description);
     }
 
     @Test

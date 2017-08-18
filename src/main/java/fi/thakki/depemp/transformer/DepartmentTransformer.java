@@ -16,6 +16,7 @@ public class DepartmentTransformer {
         DepartmentListDto result = new DepartmentListDto();
         result.id = DepartmentId.valueOf(department.getId());
         result.name = department.getName();
+        result.description = department.getDescription();
         return result;
     }
 

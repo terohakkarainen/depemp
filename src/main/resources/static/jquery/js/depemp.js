@@ -51,7 +51,7 @@ function _refreshDepartments() {
         for(let i = 0; i < data.departments.length; i++) {
           let department = $('<div class="department" />');
           department.append("<h3>" + data.departments[i].name + "</h3>");
-          department.append("<div><p>" + "some text" + "</p></div>");
+          department.append("<div><p>" + data.departments[i].description + "</p></div>");
           accordion.append(department);
         }
       }

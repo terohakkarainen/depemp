@@ -22,12 +22,6 @@ body {
   margin-top: 0px;
 }
 
-#footer {
-  height: 50px;
-  background-color: skyblue;
-  border-radius: 8px;
-}
-
 #contents {
   padding: 10px 10px 10px 10px;
   min-height: 200px;
