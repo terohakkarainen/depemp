@@ -64,6 +64,7 @@ function _refreshDepartments() {
   })
   .done(function() {
     $("#departmentsAccordion").accordion("refresh");
+    $("#departmentsAccordion").accordion("option", "active", 0);
   });
 }
 
